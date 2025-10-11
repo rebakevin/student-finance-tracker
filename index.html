@@ -1,294 +1,408 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Track your student expenses and manage your budget effectively">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Track your student expenses and manage your budget effectively"
+    />
     <title>Student Finance Tracker</title>
-    <link rel="stylesheet" href="src/styles/main.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
+    <link rel="stylesheet" href="src/styles/main.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    
+
     <header class="header">
-        <div class="container">
-            <h1>Student Finance Tracker</h1>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="#dashboard" class="nav-link active" data-section="dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li><a href="#transactions" class="nav-link" data-section="transactions"><i class="fas fa-exchange-alt"></i> Transactions</a></li>
-                    <li><a href="#add-transaction" class="nav-link" data-section="add-transaction"><i class="fas fa-plus-circle"></i> Add Transaction</a></li>
-                    <li><a href="#settings" class="nav-link" data-section="settings"><i class="fas fa-cog"></i> Settings</a></li>
-                    <li><a href="#about" class="nav-link" data-section="about"><i class="fas fa-info-circle"></i> About</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <h1>Student Finance Tracker</h1>
+        <nav class="main-nav">
+          <ul>
+            <li>
+              <a
+                href="#dashboard"
+                class="nav-link active"
+                data-section="dashboard"
+                ><i class="fas fa-home"></i> Dashboard</a
+              >
+            </li>
+            <li>
+              <a
+                href="#transactions"
+                class="nav-link"
+                data-section="transactions"
+                ><i class="fas fa-exchange-alt"></i> Transactions</a
+              >
+            </li>
+            <li>
+              <a
+                href="#add-transaction"
+                class="nav-link"
+                data-section="add-transaction"
+                ><i class="fas fa-plus-circle"></i> Add Transaction</a
+              >
+            </li>
+            <li>
+              <a href="#settings" class="nav-link" data-section="settings"
+                ><i class="fas fa-cog"></i> Settings</a
+              >
+            </li>
+            <li>
+              <a href="#about" class="nav-link" data-section="about"
+                ><i class="fas fa-info-circle"></i> About</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
     <main id="main-content" class="main-content">
-        <!-- Dashboard Section -->
-        <section id="dashboard" class="section active">
-            <div class="container">
-                <h2>Dashboard</h2>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <h3>Total Balance</h3>
-                        <p class="stat-amount" id="total-balance">$0.00</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>This Month</h3>
-                        <p class="stat-amount" id="monthly-total">$0.00</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Top Category</h3>
-                        <p id="top-category">-</p>
-                    </div>
-                </div>
-                
-                <div class="recent-transactions">
-                    <h3>Recent Transactions</h3>
-                    <div class="transactions-list" id="recent-transactions">
-                        <!-- Transactions will be inserted here by JavaScript -->
-                        <p class="empty-state">No recent transactions. Add your first transaction to get started!</p>
-                    </div>
-                </div>
+      <!-- Dashboard Section -->
+      <section id="dashboard" class="section">
+        <div class="container">
+          <h2>Dashboard</h2>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <h3>Total Balance</h3>
+              <p class="stat-amount" id="total-balance">$0.00</p>
             </div>
-        </section>
+            <div class="stat-card">
+              <h3>This Month</h3>
+              <p class="stat-amount" id="monthly-total">$0.00</p>
+            </div>
+            <div class="stat-card">
+              <h3>Top Category</h3>
+              <p id="top-category">-</p>
+            </div>
+          </div>
 
-        <!-- Transactions Section -->
-        <section id="transactions" class="section">
-            <div class="container">
-                <div class="section-header">
-                    <h2>All Transactions</h2>
-                    <div class="search-container">
-                        <input type="text" id="search-transactions" placeholder="Search transactions..." aria-label="Search transactions">
-                        <button id="clear-search" aria-label="Clear search"><i class="fas fa-times"></i></button>
-                    </div>
-                </div>
-                
-                <div class="filters">
-                    <div class="filter-group">
-                        <label for="filter-category">Category:</label>
-                        <select id="filter-category">
-                            <option value="">All Categories</option>
-                            <!-- Categories will be populated by JavaScript -->
-                        </select>
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label for="sort-by">Sort by:</label>
-                        <select id="sort-by">
-                            <option value="date-desc">Date (Newest First)</option>
-                            <option value="date-asc">Date (Oldest First)</option>
-                            <option value="amount-desc">Amount (High to Low)</option>
-                            <option value="amount-asc">Amount (Low to High)</option>
-                            <option value="category">Category</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="transactions-table-container">
-                    <table class="transactions-table" aria-label="Transactions">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Description</th>
-                                <th>Category</th>
-                                <th>Amount</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="transactions-list">
-                            <!-- Transactions will be inserted here by JavaScript -->
-                            <tr class="empty-row">
-                                <td colspan="5">No transactions found</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="export-actions">
-                    <button id="export-json" class="btn">Export as JSON</button>
-                    <button id="import-json" class="btn btn-secondary">Import from JSON</button>
-                    <input type="file" id="import-json-file" accept=".json" style="display: none;">
-                </div>
+          <div class="recent-transactions">
+            <h3>Recent Transactions</h3>
+            <div class="transactions-list" id="recent-transactions">
+              <p class="empty-state">
+                No recent transactions. Add your first transaction to get
+                started!
+              </p>
             </div>
-        </section>
+          </div>
+        </div>
+      </section>
 
-        <!-- Add Transaction Section -->
-        <section id="add-transaction" class="section">
-            <div class="container">
-                <h2>Add New Transaction</h2>
-                <form id="transaction-form" class="transaction-form">
-                    <div class="form-group">
-                        <label for="transaction-description">Description *</label>
-                        <input type="text" id="transaction-description" required 
-                               aria-required="true" 
-                               pattern="^\S(?:.*\S)?$"
-                               title="Description cannot be empty or contain only whitespace">
-                        <span class="error-message" id="description-error"></span>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="transaction-amount">Amount *</label>
-                            <div class="input-with-symbol">
-                                <span class="currency-symbol">$</span>
-                                <input type="number" id="transaction-amount" step="0.01" min="0.01" required
-                                       aria-required="true"
-                                       pattern="^(0|[1-9]\d*)(\.\d{1,2})?$"
-                                       title="Please enter a valid amount (e.g., 10.50)">
-                            </div>
-                            <span class="error-message" id="amount-error"></span>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="transaction-category">Category *</label>
-                            <select id="transaction-category" required aria-required="true">
-                                <option value="">Select a category</option>
-                                <option value="Food">Food</option>
-                                <option value="Books">Books</option>
-                                <option value="Transport">Transport</option>
-                                <option value="Entertainment">Entertainment</option>
-                                <option value="Fees">Fees</option>
-                                <option value="Other">Other</option>
-                            </select>
-                            <span class="error-message" id="category-error"></span>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="transaction-date">Date *</label>
-                        <input type="date" id="transaction-date" required
-                               aria-required="true"
-                               pattern="\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])"
-                               title="Please enter a valid date in YYYY-MM-DD format">
-                        <span class="error-message" id="date-error"></span>
-                    </div>
-                    
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Add Transaction</button>
-                        <button type="reset" class="btn btn-secondary">Clear</button>
-                    </div>
-                </form>
+      <!-- Transactions Section -->
+      <section id="transactions" class="section active">
+        <div class="container">
+          <div class="section-header">
+            <h2>All Transactions</h2>
+            <div class="search-container">
+              <input
+                type="text"
+                id="search-transactions"
+                placeholder="Search transactions..."
+                aria-label="Search transactions"
+              />
+              <button id="clear-search" aria-label="Clear search">
+                <i class="fas fa-times"></i>
+              </button>
             </div>
-        </section>
+          </div>
 
-        <!-- Settings Section -->
-        <section id="settings" class="section">
-            <div class="container">
-                <h2>Settings</h2>
-                <form id="settings-form" class="settings-form">
-                    <div class="form-group">
-                        <h3>Currency</h3>
-                        <div class="currency-options">
-                            <label class="radio-label">
-                                <input type="radio" name="currency" value="USD" checked>
-                                <span>US Dollar ($)</span>
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="currency" value="EUR">
-                                <span>Euro (€)</span>
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="currency" value="GBP">
-                                <span>British Pound (£)</span>
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <h3>Budget Limit</h3>
-                        <div class="input-with-symbol">
-                            <span class="currency-symbol">$</span>
-                            <input type="number" id="monthly-budget" min="0" step="0.01" placeholder="Enter monthly budget">
-                        </div>
-                        <p class="hint">Set a monthly budget to track your spending</p>
-                    </div>
-                    
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Save Settings</button>
-                    </div>
-                </form>
-                
-                <div class="danger-zone">
-                    <h3>Danger Zone</h3>
-                    <div class="danger-actions">
-                        <button id="clear-data" class="btn btn-danger">Clear All Data</button>
-                        <p class="warning">Warning: This will permanently delete all your transactions and cannot be undone.</p>
-                    </div>
-                </div>
+          <div class="filters">
+            <div class="filter-group">
+              <label for="filter-category">Category:</label>
+              <select id="filter-category">
+                <option value="">All Categories</option>
+                <!-- Categories will be populated by JavaScript -->
+              </select>
             </div>
-        </section>
 
-        <!-- About Section -->
-        <section id="about" class="section">
-            <div class="container">
-                <h2>About Student Finance Tracker</h2>
-                <div class="about-content">
-                    <p>Student Finance Tracker is a simple, accessible web application designed to help students manage their finances effectively.</p>
-                    
-                    <h3>Features</h3>
-                    <ul>
-                        <li>Track income and expenses</li>
-                        <li>Categorize transactions</li>
-                        <li>Set monthly budget limits</li>
-                        <li>View spending statistics</li>
-                        <li>Import/Export data</li>
-                    </ul>
-                    
-                    <h3>Contact</h3>
-                    <p>If you have any questions or feedback, please feel free to reach out:</p>
-                    <ul class="contact-links">
-                        <li><i class="fab fa-github"></i> <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-                        <li><i class="fas fa-envelope"></i> <a href="mailto:your.email@example.com">Email</a></li>
-                    </ul>
-                    
-                    <div class="version">Version 1.0.0</div>
-                </div>
+            <div class="filter-group">
+              <label for="sort-by">Sort by:</label>
+              <select id="sort-by">
+                <option value="date-desc">Date (Newest First)</option>
+                <option value="date-asc">Date (Oldest First)</option>
+                <option value="amount-desc">Amount (High to Low)</option>
+                <option value="amount-asc">Amount (Low to High)</option>
+                <option value="category">Category</option>
+              </select>
             </div>
-        </section>
+          </div>
+
+          <div class="transactions-table-container">
+            <table class="transactions-table" aria-label="Transactions">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Category</th>
+                  <th>Amount</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="transactions-list">
+                <!-- Transactions will be inserted here by JavaScript -->
+                <tr class="empty-row">
+                  <td colspan="5">No transactions found</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="export-actions">
+            <button id="export-json" class="btn">Export as JSON</button>
+            <button id="import-json" class="btn btn-secondary">
+              Import from JSON
+            </button>
+            <input
+              type="file"
+              id="import-json-file"
+              accept=".json"
+              style="display: none"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Add Transaction Section -->
+      <section id="add-transaction" class="section">
+        <div class="container">
+          <h2>Add New Transaction</h2>
+          <form id="transaction-form" class="transaction-form">
+            <div class="form-group">
+              <label for="transaction-description">Description *</label>
+              <input
+                type="text"
+                id="transaction-description"
+                required
+                aria-required="true"
+                pattern="^\S(?:.*\S)?$"
+                title="Description cannot be empty or contain only whitespace"
+              />
+              <span class="error-message" id="description-error"></span>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="transaction-amount">Amount *</label>
+                <div class="input-with-symbol">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    type="number"
+                    id="transaction-amount"
+                    step="0.01"
+                    min="0.01"
+                    required
+                    aria-required="true"
+                    pattern="^(0|[1-9]\d*)(\.\d{1,2})?$"
+                    title="Please enter a valid amount (e.g., 10.50)"
+                  />
+                </div>
+                <span class="error-message" id="amount-error"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="transaction-category">Category *</label>
+                <select id="transaction-category" required aria-required="true">
+                  <option value="">Select a category</option>
+                  <option value="Food">Food</option>
+                  <option value="Books">Books</option>
+                  <option value="Transport">Transport</option>
+                  <option value="Entertainment">Entertainment</option>
+                  <option value="Fees">Fees</option>
+                  <option value="Other">Other</option>
+                </select>
+                <span class="error-message" id="category-error"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="transaction-date">Date *</label>
+              <input
+                type="date"
+                id="transaction-date"
+                required
+                aria-required="true"
+                pattern="\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])"
+                title="Please enter a valid date in YYYY-MM-DD format"
+              />
+              <span class="error-message" id="date-error"></span>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">
+                Add Transaction
+              </button>
+              <button type="reset" class="btn btn-secondary">Clear</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Settings Section -->
+      <section id="settings" class="section">
+        <div class="container">
+          <h2>Settings</h2>
+          <form id="settings-form" class="settings-form">
+            <div class="form-group">
+              <h3>Currency</h3>
+              <div class="currency-options">
+                <label class="radio-label">
+                  <input type="radio" name="currency" value="USD" checked />
+                  <span>US Dollar ($)</span>
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="currency" value="EUR" />
+                  <span>Euro (€)</span>
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="currency" value="GBP" />
+                  <span>British Pound (£)</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <h3>Budget Limit</h3>
+              <div class="input-with-symbol">
+                <span class="currency-symbol">$</span>
+                <input
+                  type="number"
+                  id="monthly-budget"
+                  min="0"
+                  step="0.01"
+                  placeholder="Enter monthly budget"
+                />
+              </div>
+              <p class="hint">Set a monthly budget to track your spending</p>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">
+                Save Settings
+              </button>
+            </div>
+          </form>
+
+          <div class="danger-zone">
+            <h3>Danger Zone</h3>
+            <div class="danger-actions">
+              <button id="clear-data" class="btn btn-danger">
+                Clear All Data
+              </button>
+              <p class="warning">
+                Warning: This will permanently delete all your transactions and
+                cannot be undone.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- About Section -->
+      <section id="about" class="section">
+        <div class="container">
+          <h2>About Student Finance Tracker</h2>
+          <div class="about-content">
+            <p>
+              Student Finance Tracker is a simple, accessible web application
+              designed to help students manage their finances effectively.
+            </p>
+
+            <h3>Features</h3>
+            <ul>
+              <li>Track income and expenses</li>
+              <li>Categorize transactions</li>
+              <li>Set monthly budget limits</li>
+              <li>View spending statistics</li>
+              <li>Import/Export data</li>
+            </ul>
+
+            <h3>Contact</h3>
+            <p>
+              If you have any questions or feedback, please feel free to reach
+              out:
+            </p>
+            <ul class="contact-links">
+              <li>
+                <i class="fab fa-github"></i>
+                <a
+                  href="https://github.com/yourusername"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >GitHub</a
+                >
+              </li>
+              <li>
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:your.email@example.com">Email</a>
+              </li>
+            </ul>
+
+            <div class="version">Version 1.0.0</div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Student Finance Tracker. All rights reserved.</p>
-        </div>
+      <div class="container">
+        <p>&copy; 2025 Student Finance Tracker. All rights reserved.</p>
+      </div>
     </footer>
 
     <!-- Modal for edit form -->
-    <div id="edit-modal" class="modal" role="dialog" aria-labelledby="edit-modal-title" aria-hidden="true">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="edit-modal-title">Edit Transaction</h2>
-                <button class="close-modal" aria-label="Close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <!-- Edit form will be inserted here by JavaScript -->
-            </div>
+    <div
+      id="edit-modal"
+      class="modal"
+      role="dialog"
+      aria-labelledby="edit-modal-title"
+      aria-hidden="true"
+    >
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="edit-modal-title">Edit Transaction</h2>
+          <button class="close-modal" aria-label="Close">&times;</button>
         </div>
+        <div class="modal-body">
+          <!-- Edit form will be inserted here by JavaScript -->
+        </div>
+      </div>
     </div>
 
     <!-- Confirmation dialog -->
-    <div id="confirm-dialog" class="modal" role="dialog" aria-labelledby="confirm-dialog-title" aria-hidden="true">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="confirm-dialog-title">Confirm Action</h2>
-                <button class="close-modal" aria-label="Close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p id="confirm-message">Are you sure you want to continue?</p>
-                <div class="modal-actions">
-                    <button id="confirm-yes" class="btn btn-primary">Yes</button>
-                    <button id="confirm-no" class="btn btn-secondary">No</button>
-                </div>
-            </div>
+    <div
+      id="confirm-dialog"
+      class="modal"
+      role="dialog"
+      aria-labelledby="confirm-dialog-title"
+      aria-hidden="true"
+    >
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="confirm-dialog-title">Confirm Action</h2>
+          <button class="close-modal" aria-label="Close">&times;</button>
         </div>
+        <div class="modal-body">
+          <p id="confirm-message">Are you sure you want to continue?</p>
+          <div class="modal-actions">
+            <button id="confirm-yes" class="btn btn-primary">Yes</button>
+            <button id="confirm-no" class="btn btn-secondary">No</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Status message container -->
-    <div id="status-message" class="status-message" role="status" aria-live="polite"></div>
+    <div
+      id="status-message"
+      class="status-message"
+      role="status"
+      aria-live="polite"
+    ></div>
 
     <!-- JavaScript files -->
     <script src="src/scripts/validators.js" type="module"></script>
@@ -298,5 +412,5 @@
     <script src="src/scripts/ui.js" type="module"></script>
     <script src="src/scripts/app.js" type="module"></script>
     <script src="src/scripts/routing.js" type="module"></script>
-</body>
+  </body>
 </html>
