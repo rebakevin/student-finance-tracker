@@ -1,8 +1,11 @@
 .header {
     background-color: #fff;
     box-shadow: var(--shadow-sm);
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
     z-index: 1000;
 }
 
@@ -35,16 +38,6 @@
     z-index: 1002;
     transition: var(--transition);
 }
-
-/* .mobile-menu-toggle:hover {
-    background-color: var(--light-color);
-    border-radius: var(--border-radius);
-}
-
-.mobile-menu-toggle:focus {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
-} */
 
 /* Hamburger icon */
 .hamburger-icon {
