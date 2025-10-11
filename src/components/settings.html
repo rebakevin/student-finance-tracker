@@ -1,0 +1,58 @@
+<section id="settings" class="section">
+  <div class="container">
+    <h2>Settings</h2>
+    <form id="settings-form" class="settings-form">
+      <div class="form-group">
+        <h3>Currency</h3>
+        <div class="currency-options">
+           <label class="radio-label">
+            <input type="radio" name="currency" value="RWF" />
+            <span>Rwandan Francs</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="currency" value="USD" checked />
+            <span>US Dollar ($)</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="currency" value="EUR" />
+            <span>Euro (€)</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <h3>Budget Limit</h3>
+        <div class="input-with-symbol">
+          <span class="currency-symbol">$</span>
+          <input
+            type="number"
+            id="monthly-budget"
+            min="0"
+            step="0.01"
+            placeholder="Enter monthly budget"
+          />
+        </div>
+        <p class="hint">Set a monthly budget to track your spending</p>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+          Save Settings
+        </button>
+      </div>
+    </form>
+
+    <div class="danger-zone">
+      <h3>Danger Zone</h3>
+      <div class="danger-actions">
+        <button id="clear-data" class="btn btn-danger">
+          Clear All Data
+        </button>
+        <p class="warning">
+          Warning: This will permanently delete all your transactions and
+          cannot be undone.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

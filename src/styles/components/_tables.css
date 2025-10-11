@@ -1,0 +1,48 @@
+.transactions-table-container {
+    overflow-x: auto;
+    margin-bottom: var(--spacing-lg);
+    background: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover {
+    background-color: rgba(0, 0, 0, 0.01);
+}
+
+.amount {
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+}
+
+.amount.income {
+    color: var(--success-color);
+}
+
+.amount.expense {
+    color: var(--danger-color);
+}

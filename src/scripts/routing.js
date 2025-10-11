@@ -1,16 +1,32 @@
-const routes = {
-  "/dashboard": "<h1>Welcome to Home</h1><p>This is the homepage.</p>",
-  "/transactions": "<h1>Transactions page</h1><p>Manage your transactions</p>",
-  "/add-transaction": "<h1>Add transactions page</h1><p>Keep a record of a transactions</p>",
-  "/settings": "<h1>Settings page</h1><p>Manage your settings</p>",
-  "/about": "<h1>About page</h1><p>About the app</p>",
-};
+/**
+ * Initialize navigation routing
+ */
+function initRouting() {
+  document.querySelectorAll(".nav-link").forEach((link) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
 
-function router() {
-  const hash = window.location.hash.replace("#", "") || "/";
-  document.getElementById("app").innerHTML =
-    routes[hash] || "<h1>404 Page Not Found</h1>";
+      const targetSection = e.currentTarget.getAttribute("data-section");
+
+      document.querySelectorAll(".section").forEach((section) => {
+        section.classList.remove("active");
+      });
+      document.querySelectorAll(".nav-link").forEach((nav) => {
+        nav.classList.remove("active");
+      });
+
+      document.getElementById(targetSection).classList.add("active");
+      e.currentTarget.classList.add("active");
+
+      window.location.hash = targetSection;
+    });
+  });
 }
 
-window.addEventListener("hashchange", router);
-window.addEventListener("load", router);
+// Wait for components to be loaded before initializing routing
+document.addEventListener('componentsLoaded', initRouting);
+
+// Fallback: if components are already loaded, initialize immediately
+if (document.querySelector('.nav-link')) {
+  initRouting();
+}
