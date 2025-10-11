@@ -1,0 +1,16 @@
+.footer {
+    background-color: var(--dark-color);
+    color: #fff;
+    padding: var(--spacing-md) 0;
+    text-align: center;
+    margin-top: auto;
+}
+
+.footer a {
+    color: #fff;
+}
+
+.footer a:hover {
+    color: var(--primary-color);
+    text-decoration: none;
+}

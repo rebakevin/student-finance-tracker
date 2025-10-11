@@ -1,0 +1,23 @@
+@media print {
+    .header,
+    .main-nav,
+    .footer,
+    .export-actions,
+    .actions-cell {
+        display: none !important;
+    }
+    
+    .section {
+        display: block !important;
+        padding: 0 !important;
+    }
+    
+    .transactions-table-container {
+        box-shadow: none;
+        border: 1px solid #dee2e6;
+    }
+    
+    @page {
+        margin: 1cm;
+    }
+}
