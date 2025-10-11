@@ -3,56 +3,8 @@
 import state from './state.js';
 import { validateDescription, validateAmount, validateCategory, validateDate } from './validators.js';
 
-// DOM Elements
-const elements = {
-    // Main sections
-    sections: {
-        dashboard: document.getElementById('dashboard'),
-        transactions: document.getElementById('transactions'),
-        addTransaction: document.getElementById('add-transaction'),
-        settings: document.getElementById('settings'),
-        about: document.getElementById('about')
-    },
-    
-    // Navigation
-    navLinks: document.querySelectorAll('.nav-link'),
-    
-    // Transaction form
-    transactionForm: document.getElementById('transaction-form'),
-    transactionDescription: document.getElementById('transaction-description'),
-    transactionAmount: document.getElementById('transaction-amount'),
-    transactionCategory: document.getElementById('transaction-category'),
-    transactionDate: document.getElementById('transaction-date'),
-    
-    // Transaction list
-    transactionsList: document.getElementById('transactions-list'),
-    recentTransactions: document.getElementById('recent-transactions'),
-    
-    // Search and filters
-    searchInput: document.getElementById('search-transactions'),
-    clearSearchBtn: document.getElementById('clear-search'),
-    filterCategory: document.getElementById('filter-category'),
-    sortBy: document.getElementById('sort-by'),
-    
-    // Dashboard elements
-    totalBalance: document.getElementById('total-balance'),
-    monthlyTotal: document.getElementById('monthly-total'),
-    topCategory: document.getElementById('top-category'),
-    
-    // Settings form
-    settingsForm: document.getElementById('settings-form'),
-    monthlyBudget: document.getElementById('monthly-budget'),
-    
-    // Modals
-    editModal: document.getElementById('edit-modal'),
-    confirmDialog: document.getElementById('confirm-dialog'),
-    confirmMessage: document.getElementById('confirm-message'),
-    confirmYes: document.getElementById('confirm-yes'),
-    confirmNo: document.getElementById('confirm-no'),
-    
-    // Status message
-    statusMessage: document.getElementById('status-message')
-};
+// DOM Elements - will be initialized after components are loaded
+let elements = {};
 
 // State for UI
 let uiState = {
@@ -61,9 +13,67 @@ let uiState = {
 };
 
 /**
+ * Initialize DOM element references after components are loaded
+ */
+function initElements() {
+    elements = {
+        // Main sections
+        sections: {
+            dashboard: document.getElementById('dashboard'),
+            transactions: document.getElementById('transactions'),
+            addTransaction: document.getElementById('add-transaction'),
+            settings: document.getElementById('settings'),
+            about: document.getElementById('about')
+        },
+        
+        // Navigation
+        navLinks: document.querySelectorAll('.nav-link'),
+        
+        // Transaction form
+        transactionForm: document.getElementById('transaction-form'),
+        transactionDescription: document.getElementById('transaction-description'),
+        transactionAmount: document.getElementById('transaction-amount'),
+        transactionCategory: document.getElementById('transaction-category'),
+        transactionDate: document.getElementById('transaction-date'),
+        
+        // Transaction list
+        transactionsList: document.getElementById('transactions-list'),
+        recentTransactions: document.getElementById('recent-transactions'),
+        
+        // Search and filters
+        searchInput: document.getElementById('search-transactions'),
+        clearSearchBtn: document.getElementById('clear-search'),
+        filterCategory: document.getElementById('filter-category'),
+        sortBy: document.getElementById('sort-by'),
+        
+        // Dashboard elements
+        totalBalance: document.getElementById('total-balance'),
+        monthlyTotal: document.getElementById('monthly-total'),
+        topCategory: document.getElementById('top-category'),
+        
+        // Settings form
+        settingsForm: document.getElementById('settings-form'),
+        monthlyBudget: document.getElementById('monthly-budget'),
+        
+        // Modals
+        editModal: document.getElementById('edit-modal'),
+        confirmDialog: document.getElementById('confirm-dialog'),
+        confirmMessage: document.getElementById('confirm-message'),
+        confirmYes: document.getElementById('confirm-yes'),
+        confirmNo: document.getElementById('confirm-no'),
+        
+        // Status message
+        statusMessage: document.getElementById('status-message')
+    };
+}
+
+/**
  * Initialize the UI
  */
 function init() {
+    // Initialize DOM element references
+    initElements();
+    
     // Set up event listeners
     setupEventListeners();
     
@@ -72,7 +82,9 @@ function init() {
     
     // Set current date as default for new transactions
     const today = new Date().toISOString().split('T')[0];
-    elements.transactionDate.value = today;
+    if (elements.transactionDate) {
+        elements.transactionDate.value = today;
+    }
 }
 
 /**
@@ -704,15 +716,15 @@ function escapeHtml(unsafe) {
         .replace(/'/g, '&#039;');
 }
 
-// Initialize the UI when the DOM is loaded
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-} else {
+// Initialize the UI when components are loaded
+document.addEventListener('componentsLoaded', () => {
     init();
-}
-
-// Subscribe to state changes
-state.subscribe(render);
+    // Subscribe to state changes after initialization
+    state.subscribe(render);
+});
 
 // Make UI functions available globally for inline event handlers
 window.state = state;
+
+// Export functions for use in other modules
+export { showStatus };
