@@ -1,0 +1,718 @@
+// UI module - Handles all DOM manipulation and event listeners
+
+import state from './state.js';
+import { validateDescription, validateAmount, validateCategory, validateDate } from './validators.js';
+
+// DOM Elements
+const elements = {
+    // Main sections
+    sections: {
+        dashboard: document.getElementById('dashboard'),
+        transactions: document.getElementById('transactions'),
+        addTransaction: document.getElementById('add-transaction'),
+        settings: document.getElementById('settings'),
+        about: document.getElementById('about')
+    },
+    
+    // Navigation
+    navLinks: document.querySelectorAll('.nav-link'),
+    
+    // Transaction form
+    transactionForm: document.getElementById('transaction-form'),
+    transactionDescription: document.getElementById('transaction-description'),
+    transactionAmount: document.getElementById('transaction-amount'),
+    transactionCategory: document.getElementById('transaction-category'),
+    transactionDate: document.getElementById('transaction-date'),
+    
+    // Transaction list
+    transactionsList: document.getElementById('transactions-list'),
+    recentTransactions: document.getElementById('recent-transactions'),
+    
+    // Search and filters
+    searchInput: document.getElementById('search-transactions'),
+    clearSearchBtn: document.getElementById('clear-search'),
+    filterCategory: document.getElementById('filter-category'),
+    sortBy: document.getElementById('sort-by'),
+    
+    // Dashboard elements
+    totalBalance: document.getElementById('total-balance'),
+    monthlyTotal: document.getElementById('monthly-total'),
+    topCategory: document.getElementById('top-category'),
+    
+    // Settings form
+    settingsForm: document.getElementById('settings-form'),
+    monthlyBudget: document.getElementById('monthly-budget'),
+    
+    // Modals
+    editModal: document.getElementById('edit-modal'),
+    confirmDialog: document.getElementById('confirm-dialog'),
+    confirmMessage: document.getElementById('confirm-message'),
+    confirmYes: document.getElementById('confirm-yes'),
+    confirmNo: document.getElementById('confirm-no'),
+    
+    // Status message
+    statusMessage: document.getElementById('status-message')
+};
+
+// State for UI
+let uiState = {
+    currentTransactionId: null,
+    confirmCallback: null
+};
+
+/**
+ * Initialize the UI
+ */
+function init() {
+    // Set up event listeners
+    setupEventListeners();
+    
+    // Initial render
+    render();
+    
+    // Set current date as default for new transactions
+    const today = new Date().toISOString().split('T')[0];
+    elements.transactionDate.value = today;
+}
+
+/**
+ * Set up all event listeners
+ */
+function setupEventListeners() {
+    // Navigation
+    elements.navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const sectionId = link.getAttribute('data-section');
+            state.navigateTo(sectionId);
+        });
+    });
+    
+    // Transaction form
+    elements.transactionForm.addEventListener('submit', handleTransactionSubmit);
+    
+    // Search and filters
+    elements.searchInput.addEventListener('input', (e) => {
+        state.setSearchQuery(e.target.value);
+    });
+    
+    elements.clearSearchBtn.addEventListener('click', () => {
+        elements.searchInput.value = '';
+        state.setSearchQuery('');
+    });
+    
+    elements.filterCategory.addEventListener('change', (e) => {
+        state.setSelectedCategory(e.target.value);
+    });
+    
+    elements.sortBy.addEventListener('change', (e) => {
+        state.setSortBy(e.target.value);
+    });
+    
+    // Settings form
+    elements.settingsForm.addEventListener('submit', handleSettingsSubmit);
+    
+    // Modal close buttons
+    document.querySelectorAll('.close-modal').forEach(btn => {
+        btn.addEventListener('click', closeAllModals);
+    });
+    
+    // Close modal when clicking outside content
+    window.addEventListener('click', (e) => {
+        if (e.target === elements.editModal) {
+            closeAllModals();
+        }
+        if (e.target === elements.confirmDialog) {
+            closeAllModals();
+        }
+    });
+    
+    // Confirm dialog buttons
+    elements.confirmYes.addEventListener('click', handleConfirmYes);
+    elements.confirmNo.addEventListener('click', closeAllModals);
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        // Close modals on Escape key
+        if (e.key === 'Escape') {
+            closeAllModals();
+        }
+    });
+}
+
+/**
+ * Handle transaction form submission
+ * @param {Event} e - Form submit event
+ */
+async function handleTransactionSubmit(e) {
+    e.preventDefault();
+    
+    // Get form data
+    const formData = new FormData(elements.transactionForm);
+    const transactionData = {
+        description: formData.get('description').trim(),
+        amount: parseFloat(formData.get('amount')),
+        category: formData.get('category'),
+        date: formData.get('date')
+    };
+    
+    // Validate form data
+    const descriptionValidation = validateDescription(transactionData.description);
+    const amountValidation = validateAmount(transactionData.amount);
+    const categoryValidation = validateCategory(transactionData.category);
+    const dateValidation = validateDate(transactionData.date);
+    
+    // Display validation errors if any
+    if (!descriptionValidation.isValid || !amountValidation.isValid || 
+        !categoryValidation.isValid || !dateValidation.isValid) {
+        
+        // Show error messages
+        document.getElementById('description-error').textContent = 
+            !descriptionValidation.isValid ? descriptionValidation.message : '';
+            
+        document.getElementById('amount-error').textContent = 
+            !amountValidation.isValid ? amountValidation.message : '';
+            
+        document.getElementById('category-error').textContent = 
+            !categoryValidation.isValid ? categoryValidation.message : '';
+            
+        document.getElementById('date-error').textContent = 
+            !dateValidation.isValid ? dateValidation.message : '';
+            
+        showStatus('Please fix the errors in the form', 'error');
+        return;
+    }
+    
+    try {
+        // Add or update transaction
+        let success = false;
+        
+        if (uiState.currentTransactionId) {
+            // Update existing transaction
+            success = await state.updateTransaction(uiState.currentTransactionId, transactionData);
+            showStatus('Transaction updated successfully', 'success');
+        } else {
+            // Add new transaction
+            success = await state.addTransaction(transactionData);
+            showStatus('Transaction added successfully', 'success');
+        }
+        
+        if (success) {
+            // Reset form
+            elements.transactionForm.reset();
+            elements.transactionDate.value = new Date().toISOString().split('T')[0];
+            uiState.currentTransactionId = null;
+            
+            // Navigate to transactions list
+            state.navigateTo('transactions');
+        }
+    } catch (error) {
+        console.error('Error saving transaction:', error);
+        showStatus('Failed to save transaction. Please try again.', 'error');
+    }
+}
+
+/**
+ * Handle settings form submission
+ * @param {Event} e - Form submit event
+ */
+async function handleSettingsSubmit(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(elements.settingsForm);
+    const settingsData = {
+        currency: formData.get('currency'),
+        monthlyBudget: formData.get('monthly-budget') ? parseFloat(formData.get('monthly-budget')) : null
+    };
+    
+    try {
+        const success = await state.updateSettings(settingsData);
+        
+        if (success) {
+            showStatus('Settings saved successfully', 'success');
+            
+            // Update UI to reflect new settings
+            renderSettingsForm();
+        }
+    } catch (error) {
+        console.error('Error saving settings:', error);
+        showStatus('Failed to save settings. Please try again.', 'error');
+    }
+}
+
+/**
+ * Handle confirm dialog "Yes" button click
+ */
+async function handleConfirmYes() {
+    if (typeof uiState.confirmCallback === 'function') {
+        try {
+            await uiState.confirmCallback();
+        } catch (error) {
+            console.error('Error in confirmation callback:', error);
+        }
+    }
+    closeAllModals();
+}
+
+/**
+ * Show confirmation dialog
+ * @param {string} message - The message to display
+ * @param {Function} callback - Callback function to execute on confirmation
+ */
+function showConfirm(message, callback) {
+    uiState.confirmCallback = callback;
+    elements.confirmMessage.textContent = message;
+    elements.confirmDialog.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    
+    // Focus the "No" button by default for safety
+    elements.confirmNo.focus();
+}
+
+/**
+ * Close all modals and dialogs
+ */
+function closeAllModals() {
+    elements.editModal.classList.remove('show');
+    elements.confirmDialog.classList.remove('show');
+    document.body.style.overflow = '';
+    uiState.confirmCallback = null;
+    
+    // Reset the form if it's open in the modal
+    if (uiState.currentTransactionId) {
+        elements.transactionForm.reset();
+        uiState.currentTransactionId = null;
+    }
+}
+
+/**
+ * Show status message
+ * @param {string} message - The message to display
+ * @param {string} type - Message type (success, error, info)
+ * @param {number} duration - Duration in milliseconds (default: 5000)
+ */
+function showStatus(message, type = 'info', duration = 5000) {
+    const status = elements.statusMessage;
+    status.textContent = message;
+    status.className = `status-message ${type}`;
+    status.classList.add('show');
+    
+    // Auto-hide after duration
+    setTimeout(() => {
+        status.classList.remove('show');
+    }, duration);
+}
+
+/**
+ * Render the UI based on current state
+ */
+function render(state) {
+    // Update active navigation
+    updateActiveNav(state.currentSection);
+    
+    // Show the current section
+    showSection(state.currentSection);
+    
+    // Update transaction list if on transactions page
+    if (state.currentSection === 'transactions') {
+        renderTransactionList(state.filteredTransactions, state.currentPage, state.itemsPerPage);
+    }
+    
+    // Update dashboard if on dashboard page
+    if (state.currentSection === 'dashboard') {
+        renderDashboard(state);
+    }
+    
+    // Update settings form if on settings page
+    if (state.currentSection === 'settings') {
+        renderSettingsForm(state.settings);
+    }
+    
+    // Update categories dropdown
+    updateCategoryDropdowns(state.categories);
+}
+
+/**
+ * Update active navigation link
+ * @param {string} activeSection - ID of the active section
+ */
+function updateActiveNav(activeSection) {
+    elements.navLinks.forEach(link => {
+        if (link.getAttribute('data-section') === activeSection) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+}
+
+/**
+ * Show a specific section and hide others
+ * @param {string} sectionId - ID of the section to show
+ */
+function showSection(sectionId) {
+    // Hide all sections
+    Object.values(elements.sections).forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // Show the requested section
+    if (elements.sections[sectionId]) {
+        elements.sections[sectionId].classList.add('active');
+    }
+    
+    // Scroll to top
+    window.scrollTo(0, 0);
+}
+
+/**
+ * Render the transaction list
+ * @param {Array} transactions - Array of transactions to display
+ * @param {number} currentPage - Current page number
+ * @param {number} itemsPerPage - Number of items per page
+ */
+function renderTransactionList(transactions, currentPage = 1, itemsPerPage = 10) {
+    const container = elements.transactionsList;
+    
+    if (!transactions || transactions.length === 0) {
+        container.innerHTML = `
+            <tr class="empty-row">
+                <td colspan="5">No transactions found</td>
+            </tr>
+        `;
+        return;
+    }
+    
+    // Calculate pagination
+    const totalPages = Math.ceil(transactions.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, transactions.length);
+    const paginatedTransactions = transactions.slice(startIndex, endIndex);
+    
+    // Generate transaction rows
+    const rows = paginatedTransactions.map(transaction => {
+        const amountClass = transaction.amount < 0 ? 'expense' : 'income';
+        const formattedAmount = formatCurrency(Math.abs(transaction.amount));
+        const formattedDate = formatDate(transaction.date);
+        
+        return `
+            <tr data-id="${transaction.id}">
+                <td>${formattedDate}</td>
+                <td>${escapeHtml(transaction.description)}</td>
+                <td><span class="category-badge">${escapeHtml(transaction.category)}</span></td>
+                <td class="amount ${amountClass}">${transaction.amount < 0 ? '-' : ''}${formattedAmount}</td>
+                <td class="actions">
+                    <button class="btn-icon edit-transaction" aria-label="Edit transaction">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-icon delete-transaction" aria-label="Delete transaction">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+    
+    // Add pagination controls
+    let pagination = '';
+    if (totalPages > 1) {
+        pagination = `
+            <tr class="pagination-row">
+                <td colspan="5">
+                    <div class="pagination">
+                        <button class="btn ${currentPage === 1 ? 'disabled' : ''}" 
+                                onclick="state.setCurrentPage(${currentPage - 1})" 
+                                ${currentPage === 1 ? 'disabled' : ''}>
+                            Previous
+                        </button>
+                        <span>Page ${currentPage} of ${totalPages}</span>
+                        <button class="btn ${currentPage === totalPages ? 'disabled' : ''}" 
+                                onclick="state.setCurrentPage(${currentPage + 1})" 
+                                ${currentPage === totalPages ? 'disabled' : ''}>
+                            Next
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }
+    
+    container.innerHTML = rows + pagination;
+    
+    // Add event listeners to action buttons
+    container.querySelectorAll('.edit-transaction').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const row = e.target.closest('tr');
+            const transactionId = row.getAttribute('data-id');
+            editTransaction(transactionId);
+        });
+    });
+    
+    container.querySelectorAll('.delete-transaction').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const row = e.target.closest('tr');
+            const transactionId = row.getAttribute('data-id');
+            deleteTransaction(transactionId);
+        });
+    });
+}
+
+/**
+ * Render the dashboard with summary and recent transactions
+ * @param {Object} state - Current application state
+ */
+function renderDashboard(state) {
+    const stats = state.getDashboardStats();
+    
+    // Update summary cards
+    elements.totalBalance.textContent = formatCurrency(stats.totalSpent);
+    elements.monthlyTotal.textContent = formatCurrency(stats.monthlySummary[getCurrentMonthYear()] || 0);
+    
+    if (stats.topCategory) {
+        elements.topCategory.textContent = 
+            `${stats.topCategory} (${formatCurrency(stats.topCategoryAmount)})`;
+    } else {
+        elements.topCategory.textContent = 'N/A';
+    }
+    
+    // Render recent transactions (last 5)
+    const recentTransactions = state.transactions.slice(0, 5);
+    renderRecentTransactions(recentTransactions);
+    
+    // TODO: Render charts if using a charting library
+}
+
+/**
+ * Render recent transactions for the dashboard
+ * @param {Array} transactions - Array of recent transactions
+ */
+function renderRecentTransactions(transactions) {
+    const container = elements.recentTransactions;
+    
+    if (!transactions || transactions.length === 0) {
+        container.innerHTML = '<p class="empty-state">No recent transactions</p>';
+        return;
+    }
+    
+    const items = transactions.map(transaction => {
+        const amountClass = transaction.amount < 0 ? 'expense' : 'income';
+        const formattedAmount = formatCurrency(Math.abs(transaction.amount));
+        const formattedDate = formatDate(transaction.date, { short: true });
+        
+        return `
+            <div class="recent-transaction">
+                <div class="transaction-details">
+                    <div class="transaction-description">${escapeHtml(transaction.description)}</div>
+                    <div class="transaction-meta">
+                        <span class="transaction-category">${escapeHtml(transaction.category)}</span>
+                        <span class="transaction-date">${formattedDate}</span>
+                    </div>
+                </div>
+                <div class="transaction-amount ${amountClass}">
+                    ${transaction.amount < 0 ? '-' : ''}${formattedAmount}
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    container.innerHTML = items;
+}
+
+/**
+ * Render the settings form with current settings
+ * @param {Object} settings - Current application settings
+ */
+function renderSettingsForm(settings = {}) {
+    if (!settings) return;
+    
+    // Set currency radio button
+    document.querySelector(`input[name="currency"][value="${settings.currency || 'USD'}"]`).checked = true;
+    
+    // Set monthly budget
+    if (settings.monthlyBudget !== null && settings.monthlyBudget !== undefined) {
+        elements.monthlyBudget.value = settings.monthlyBudget;
+    } else {
+        elements.monthlyBudget.value = '';
+    }
+}
+
+/**
+ * Update category dropdowns with current categories
+ * @param {Array} categories - Array of category names
+ */
+function updateCategoryDropdowns(categories = []) {
+    if (!Array.isArray(categories)) return;
+    
+    // Update transaction form category dropdown
+    const categorySelects = [
+        elements.transactionCategory,
+        elements.filterCategory
+    ];
+    
+    categorySelects.forEach(select => {
+        if (!select) return;
+        
+        // Store current value
+        const currentValue = select.value;
+        
+        // Clear existing options except the first one (default/placeholder)
+        while (select.options.length > 1) {
+            select.remove(1);
+        }
+        
+        // Add categories
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category;
+            option.textContent = category;
+            select.appendChild(option);
+        });
+        
+        // Restore selected value if it still exists
+        if (currentValue && categories.includes(currentValue)) {
+            select.value = currentValue;
+        }
+    });
+}
+
+/**
+ * Open the edit transaction modal
+ * @param {string} transactionId - ID of the transaction to edit
+ */
+async function editTransaction(transactionId) {
+    try {
+        const transaction = state.getState().transactions.find(t => t.id === transactionId);
+        
+        if (!transaction) {
+            throw new Error('Transaction not found');
+        }
+        
+        // Set form values
+        elements.transactionDescription.value = transaction.description;
+        elements.transactionAmount.value = Math.abs(transaction.amount);
+        elements.transactionCategory.value = transaction.category;
+        elements.transactionDate.value = transaction.date;
+        
+        // Update form title and submit button
+        document.querySelector('#add-transaction h2').textContent = 'Edit Transaction';
+        elements.transactionForm.querySelector('button[type="submit"]').textContent = 'Update Transaction';
+        
+        // Store the transaction ID for update
+        uiState.currentTransactionId = transactionId;
+        
+        // Show the add transaction section
+        state.navigateTo('add-transaction');
+        
+        // Focus the first field
+        elements.transactionDescription.focus();
+        
+    } catch (error) {
+        console.error('Error preparing transaction for edit:', error);
+        showStatus('Failed to load transaction for editing', 'error');
+    }
+}
+
+/**
+ * Prompt for confirmation before deleting a transaction
+ * @param {string} transactionId - ID of the transaction to delete
+ */
+function deleteTransaction(transactionId) {
+    const transaction = state.getState().transactions.find(t => t.id === transactionId);
+    
+    if (!transaction) {
+        showStatus('Transaction not found', 'error');
+        return;
+    }
+    
+    showConfirm(
+        `Are you sure you want to delete the transaction "${escapeHtml(transaction.description)}"?`,
+        async () => {
+            const success = await state.deleteTransaction(transactionId);
+            if (success) {
+                showStatus('Transaction deleted successfully', 'success');
+            }
+        }
+    );
+}
+
+/**
+ * Format a date string
+ * @param {string} dateString - Date string in YYYY-MM-DD format
+ * @param {Object} options - Formatting options
+ * @returns {string} Formatted date string
+ */
+function formatDate(dateString, options = {}) {
+    if (!dateString) return '';
+    
+    const date = new Date(dateString);
+    
+    if (isNaN(date.getTime())) {
+        return dateString; // Return original if invalid date
+    }
+    
+    if (options.short) {
+        // Short format: MMM D (e.g., Jan 15)
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+    
+    // Default format: Month Day, Year (e.g., January 15, 2023)
+    return date.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    });
+}
+
+/**
+ * Format a number as currency
+ * @param {number} amount - The amount to format
+ * @param {string} currency - Currency code (e.g., 'USD', 'EUR')
+ * @returns {string} Formatted currency string
+ */
+function formatCurrency(amount, currency = 'USD') {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: currency || 'USD',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(amount || 0);
+}
+
+/**
+ * Get current month and year in YYYY-MM format
+ * @returns {string} Current month and year (e.g., '2023-04')
+ */
+function getCurrentMonthYear() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    return `${year}-${month}`;
+}
+
+/**
+ * Escape HTML to prevent XSS
+ * @param {string} unsafe - Unsafe HTML string
+ * @returns {string} Escaped HTML string
+ */
+function escapeHtml(unsafe) {
+    if (typeof unsafe !== 'string') return '';
+    return unsafe
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+// Initialize the UI when the DOM is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
+
+// Subscribe to state changes
+state.subscribe(render);
+
+// Make UI functions available globally for inline event handlers
+window.state = state;
