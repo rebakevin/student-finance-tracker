@@ -82,8 +82,8 @@ function init() {
   // Set up event listeners
   setupEventListeners();
 
-  // Initial render
-  render();
+  // Initial render with current state
+  render(state.getState());
 
   // Set current date as default and max for new transactions
   const today = new Date().toISOString().split('T')[0];
@@ -91,8 +91,9 @@ function init() {
     elements.transactionDate.value = today;
     elements.transactionDate.setAttribute('max', today);
   }
-  
-  console.log('Date input max attribute set to:', elements.transactionDate?.max);
+
+  console.log('✓ UI initialized');
+  console.log('Current state:', state.getState());
 }
 
 /**
@@ -131,6 +132,25 @@ function setupEventListeners() {
 
   // Settings form
   elements.settingsForm.addEventListener('submit', handleSettingsSubmit);
+
+  // Export/Import buttons
+  const exportBtn = document.getElementById('export-json');
+  const importBtn = document.getElementById('import-json');
+  const importFileInput = document.getElementById('import-json-file');
+
+  if (exportBtn) {
+    exportBtn.addEventListener('click', handleExportData);
+  }
+
+  if (importBtn) {
+    importBtn.addEventListener('click', () => {
+      importFileInput?.click();
+    });
+  }
+
+  if (importFileInput) {
+    importFileInput.addEventListener('change', handleImportData);
+  }
 
   // Modal close buttons
   document.querySelectorAll('.close-modal').forEach((btn) => {
@@ -215,13 +235,16 @@ async function handleTransactionSubmit(e) {
       : '';
 
     // Show the first error message in the status
-    const firstError = 
-      !descriptionValidation.isValid ? descriptionValidation.message :
-      !amountValidation.isValid ? amountValidation.message :
-      !categoryValidation.isValid ? categoryValidation.message :
-      !dateValidation.isValid ? dateValidation.message :
-      'Please fix the errors in the form';
-    
+    const firstError = !descriptionValidation.isValid
+      ? descriptionValidation.message
+      : !amountValidation.isValid
+      ? amountValidation.message
+      : !categoryValidation.isValid
+      ? categoryValidation.message
+      : !dateValidation.isValid
+      ? dateValidation.message
+      : 'Please fix the errors in the form';
+
     showStatus(firstError, 'error');
     return;
   }
@@ -363,6 +386,7 @@ function render(state) {
 
   // Update transaction list if on transactions page
   if (state.currentSection === 'transactions') {
+    console.log('Rendering transactions:', state.filteredTransactions.length);
     renderTransactionList(
       state.filteredTransactions,
       state.currentPage,
@@ -412,7 +436,7 @@ function showSection(sectionId) {
   if (elements.sections[sectionId]) {
     elements.sections[sectionId].classList.add('active');
   }
-  
+
   // Set max date when showing add-transaction section
   if (sectionId === 'addTransaction' && elements.transactionDate) {
     const today = new Date().toISOString().split('T')[0];
@@ -439,7 +463,17 @@ function renderTransactionList(
 ) {
   const container = elements.transactionsList;
 
+  console.log('📊 renderTransactionList called');
+  console.log('Transactions to render:', transactions);
+  console.log('Container element:', container);
+
+  if (!container) {
+    console.error('❌ Transaction list container not found!');
+    return;
+  }
+
   if (!transactions || transactions.length === 0) {
+    console.log('⚠️ No transactions to display');
     container.innerHTML = `
             <tr class="empty-row">
                 <td colspan="5">No transactions found</td>
@@ -447,6 +481,8 @@ function renderTransactionList(
         `;
     return;
   }
+
+  console.log('✅ Rendering', transactions.length, 'transactions');
 
   // Calculate pagination
   const totalPages = Math.ceil(transactions.length / itemsPerPage);
@@ -538,9 +574,9 @@ function renderTransactionList(
 
 /**
  * Render the dashboard with summary and recent transactions
- * @param {Object} state - Current application state
+ * @param {Object} stateData - Current application state data
  */
-function renderDashboard(state) {
+function renderDashboard(stateData) {
   const stats = state.getDashboardStats();
 
   // Update summary cards
@@ -558,7 +594,7 @@ function renderDashboard(state) {
   }
 
   // Render recent transactions (last 5)
-  const recentTransactions = state.transactions.slice(0, 5);
+  const recentTransactions = stateData.transactions.slice(0, 5);
   renderRecentTransactions(recentTransactions);
 
   // TODO: Render charts if using a charting library
@@ -800,6 +836,54 @@ function escapeHtml(unsafe) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
+}
+
+/**
+ * Handle export data button click
+ */
+function handleExportData() {
+  try {
+    const jsonData = state.exportAllData();
+    const blob = new Blob([jsonData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `finance-tracker-export-${
+      new Date().toISOString().split('T')[0]
+    }.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showStatus('Data exported successfully', 'success');
+  } catch (error) {
+    console.error('Error exporting data:', error);
+    showStatus('Failed to export data', 'error');
+  }
+}
+
+/**
+ * Handle import data file selection
+ */
+async function handleImportData(e) {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  try {
+    const text = await file.text();
+    const success = await state.importAllData(text);
+
+    if (success) {
+      showStatus('Data imported successfully', 'success');
+      // Reset file input
+      e.target.value = '';
+    } else {
+      showStatus('Failed to import data. Invalid file format.', 'error');
+    }
+  } catch (error) {
+    console.error('Error importing data:', error);
+    showStatus('Failed to import data', 'error');
+  }
 }
 
 // Initialize the UI when components are loaded
