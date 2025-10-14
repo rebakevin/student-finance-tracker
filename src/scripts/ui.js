@@ -678,7 +678,7 @@ function renderRecentTransactions(transactions) {
   const container = elements.recentTransactions;
 
   if (!transactions || transactions.length === 0) {
-    container.innerHTML = '<p class="empty-state">No recent transactions</p>';
+    container.innerHTML = '<p class="empty-state">No recent transactions. Add your first transaction to get started!</p>';
     return;
   }
 
@@ -686,23 +686,28 @@ function renderRecentTransactions(transactions) {
     .map((transaction) => {
       const amountClass = transaction.amount < 0 ? 'expense' : 'income';
       const formattedAmount = formatCurrency(Math.abs(transaction.amount));
-      const formattedDate = formatDate(transaction.date, { short: true });
+      const formattedDate = formatDate(transaction.date);
 
       return `
-            <div class="recent-transaction">
-                <div class="transaction-details">
-                    <div class="transaction-description">${escapeHtml(
-                      transaction.description
-                    )}</div>
-                    <div class="transaction-meta">
-                        <span class="transaction-category">${escapeHtml(
-                          transaction.category
-                        )}</span>
-                        <span class="transaction-date">${formattedDate}</span>
+            <div class="transaction-card">
+                <div class="transaction-card-header">
+                    <div class="transaction-card-icon ${amountClass}">
+                        <i class="fas fa-${transaction.amount < 0 ? 'arrow-down' : 'arrow-up'}"></i>
+                    </div>
+                    <div class="transaction-card-info">
+                        <h4 class="transaction-card-title">${escapeHtml(transaction.description)}</h4>
+                        <div class="transaction-card-meta">
+                            <span class="transaction-card-category">
+                                <i class="fas fa-tag"></i> ${escapeHtml(transaction.category)}
+                            </span>
+                            <span class="transaction-card-date">
+                                <i class="fas fa-calendar"></i> ${formattedDate}
+                            </span>
+                        </div>
                     </div>
                 </div>
-                <div class="transaction-amount ${amountClass}">
-                    ${transaction.amount < 0 ? '-' : ''}${formattedAmount}
+                <div class="transaction-card-amount ${amountClass}">
+                    ${transaction.amount < 0 ? '-' : '+'}${formattedAmount}
                 </div>
             </div>
         `;
