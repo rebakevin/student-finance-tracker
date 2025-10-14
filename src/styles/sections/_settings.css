@@ -37,6 +37,28 @@
     margin-top: var(--spacing-xs);
 }
 
+.conversion-rate-group {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.conversion-rate-group label {
+    font-weight: 500;
+    min-width: 80px;
+}
+
+.conversion-rate-group input {
+    flex: 1;
+    max-width: 200px;
+}
+
+.conversion-rate-group span {
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
 .danger-zone {
     background: #fff;
     border-radius: var(--border-radius);

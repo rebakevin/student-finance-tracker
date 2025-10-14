@@ -8,19 +8,28 @@ const BASE_CURRENCY = 'RWF';
 const USD_TO_RWF = 1452.49;
 const EURO_TO_RWF = 1681.40;
 
-// Currency conversion rates (all relative to RWF as base)
-const CURRENCY_RATES = {
-    'RWF': 1,
-    'USD': 1 / USD_TO_RWF,
-    'EUR': 1 / EURO_TO_RWF
-};
+/**
+ * Get currency conversion rates from settings
+ * @returns {Object} Currency rates relative to RWF as base
+ */
+function getCurrencyRates() {
+    const settings = getSettings();
+    const usdToRwf = settings.usdToRwf || USD_TO_RWF;
+    const eurToRwf = settings.eurToRwf || EURO_TO_RWF;
+    
+    return {
+        'RWF': 1,
+        'USD': 1 / usdToRwf,
+        'EUR': 1 / eurToRwf
+    };
+}
 
 /**
  * Get available currencies
  * @returns {Array} Array of currency codes
  */
 export function getAvailableCurrencies() {
-    return Object.keys(CURRENCY_RATES);
+    return ['RWF', 'USD', 'EUR'];
 }
 
 /**
@@ -33,11 +42,14 @@ export function getAvailableCurrencies() {
 export function convertCurrency(amount, fromCurrency, toCurrency) {
     if (fromCurrency === toCurrency) return amount;
     
+    // Get current conversion rates from settings
+    const rates = getCurrencyRates();
+    
     // Convert to RWF first (base currency)
-    const amountInRWF = amount / (CURRENCY_RATES[fromCurrency] || 1);
+    const amountInRWF = amount / (rates[fromCurrency] || 1);
     
     // Convert from RWF to target currency
-    const convertedAmount = amountInRWF * (CURRENCY_RATES[toCurrency] || 1);
+    const convertedAmount = amountInRWF * (rates[toCurrency] || 1);
     
     return parseFloat(convertedAmount.toFixed(2));
 }
@@ -46,7 +58,9 @@ export function convertCurrency(amount, fromCurrency, toCurrency) {
 const defaultSettings = {
     currency: DEFAULT_CURRENCY,
     monthlyBudget: null,
-    categories: [...DEFAULT_CATEGORIES]
+    categories: [...DEFAULT_CATEGORIES],
+    usdToRwf: USD_TO_RWF,
+    eurToRwf: EURO_TO_RWF
 };
 
 // Initialize default data structure

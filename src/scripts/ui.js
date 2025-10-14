@@ -294,16 +294,24 @@ async function handleSettingsSubmit(e) {
     monthlyBudget: formData.get('monthly-budget')
       ? parseFloat(formData.get('monthly-budget'))
       : null,
+    usdToRwf: formData.get('usd-to-rwf')
+      ? parseFloat(formData.get('usd-to-rwf'))
+      : 1452.49,
+    eurToRwf: formData.get('eur-to-rwf')
+      ? parseFloat(formData.get('eur-to-rwf'))
+      : 1681.40,
   };
 
   try {
     const success = await state.updateSettings(settingsData);
 
     if (success) {
-      showStatus('Settings saved successfully', 'success');
+      showStatus('Settings saved successfully. Refreshing...', 'success');
 
-      // Update UI to reflect new settings
-      renderSettingsForm();
+      // Reload the page after a short delay to show the success message
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     }
   } catch (error) {
     console.error('Error saving settings:', error);
@@ -650,15 +658,30 @@ function renderSettingsForm(settings = {}) {
   if (!settings) return;
 
   // Set currency radio button
-  document.querySelector(
+  const currencyRadio = document.querySelector(
     `input[name="currency"][value="${settings.currency || 'USD'}"]`
-  ).checked = true;
+  );
+  if (currencyRadio) {
+    currencyRadio.checked = true;
+  }
 
   // Set monthly budget
   if (settings.monthlyBudget !== null && settings.monthlyBudget !== undefined) {
     elements.monthlyBudget.value = settings.monthlyBudget;
   } else {
     elements.monthlyBudget.value = '';
+  }
+
+  // Set conversion rates
+  const usdToRwfInput = document.getElementById('usd-to-rwf');
+  const eurToRwfInput = document.getElementById('eur-to-rwf');
+  
+  if (usdToRwfInput) {
+    usdToRwfInput.value = settings.usdToRwf || 1452.49;
+  }
+  
+  if (eurToRwfInput) {
+    eurToRwfInput.value = settings.eurToRwf || 1681.40;
   }
 }
 
