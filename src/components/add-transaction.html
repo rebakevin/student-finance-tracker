@@ -7,6 +7,7 @@
         <input
           type="text"
           id="transaction-description"
+          name="description"
           required
           aria-required="true"
           pattern="^\S(?:.*\S)?$"
@@ -23,6 +24,7 @@
             <input
               type="number"
               id="transaction-amount"
+              name="amount"
               step="0.01"
               min="0.01"
               required
@@ -36,7 +38,7 @@
 
         <div class="form-group">
           <label for="transaction-category">Category *</label>
-          <select id="transaction-category" required aria-required="true">
+          <select id="transaction-category" name="category" required aria-required="true">
             <option value="">Select a category</option>
             <option value="Food">Food</option>
             <option value="Books">Books</option>
@@ -54,6 +56,7 @@
         <input
           type="date"
           id="transaction-date"
+          name="date"
           required
           aria-required="true"
           pattern="\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])"
