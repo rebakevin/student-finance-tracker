@@ -228,9 +228,20 @@ export function updateSettings(newSettings) {
         }));
         
         // Convert monthly budget if it exists
-        if (data.settings.monthlyBudget) {
-            data.settings.monthlyBudget = convertCurrency(
+        if (data.settings.monthlyBudget && data.settings.monthlyBudget > 0) {
+            const convertedBudget = convertCurrency(
                 data.settings.monthlyBudget,
+                oldCurrency,
+                newCurrency
+            );
+            console.log(`Converting budget: ${data.settings.monthlyBudget} ${oldCurrency} → ${convertedBudget} ${newCurrency}`);
+            newSettings.monthlyBudget = convertedBudget;
+        }
+        
+        // Also convert the incoming monthlyBudget if it's being set
+        if (newSettings.monthlyBudget && newSettings.monthlyBudget > 0) {
+            newSettings.monthlyBudget = convertCurrency(
+                newSettings.monthlyBudget,
                 oldCurrency,
                 newCurrency
             );

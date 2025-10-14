@@ -250,6 +250,42 @@ async function handleTransactionSubmit(e) {
   }
 
   try {
+    // Check budget limit before adding new transaction
+    if (!uiState.currentTransactionId) {
+      const currentState = state.getState();
+      const monthlyBudget = currentState.settings?.monthlyBudget;
+      
+      if (monthlyBudget && monthlyBudget > 0) {
+        // Get current month's transactions
+        const transactionDate = new Date(transactionData.date);
+        const transactionMonth = `${transactionDate.getFullYear()}-${String(transactionDate.getMonth() + 1).padStart(2, '0')}`;
+        
+        const monthlyTransactions = currentState.transactions.filter(tx => {
+          const txDate = new Date(tx.date);
+          const txMonth = `${txDate.getFullYear()}-${String(txDate.getMonth() + 1).padStart(2, '0')}`;
+          return txMonth === transactionMonth;
+        });
+        
+        // Calculate current month's total
+        const currentMonthTotal = monthlyTransactions.reduce((sum, tx) => sum + tx.amount, 0);
+        const newTotal = currentMonthTotal + transactionData.amount;
+        
+        // Check if adding this transaction would exceed budget
+        if (newTotal > monthlyBudget) {
+          const remaining = monthlyBudget - currentMonthTotal;
+          showStatus(
+            `Budget limit exceeded! Monthly budget: ${formatCurrency(monthlyBudget)}. ` +
+            `Current spending: ${formatCurrency(currentMonthTotal)}. ` +
+            `Remaining: ${formatCurrency(remaining)}. ` +
+            `This transaction would exceed your budget by ${formatCurrency(newTotal - monthlyBudget)}.`,
+            'error',
+            8000
+          );
+          return;
+        }
+      }
+    }
+    
     // Add or update transaction
     let success = false;
 
@@ -589,9 +625,35 @@ function renderDashboard(stateData) {
 
   // Update summary cards
   elements.totalBalance.textContent = formatCurrency(stats.totalSpent);
-  elements.monthlyTotal.textContent = formatCurrency(
-    stats.monthlySummary[getCurrentMonthYear()] || 0
-  );
+  
+  const currentMonthTotal = stats.monthlySummary[getCurrentMonthYear()] || 0;
+  elements.monthlyTotal.textContent = formatCurrency(currentMonthTotal);
+
+  // Update budget information
+  const monthlyBudgetDisplay = document.getElementById('monthly-budget-display');
+  const remainingBudgetDisplay = document.getElementById('remaining-budget');
+  const monthlyBudget = stateData.settings?.monthlyBudget;
+  
+  if (monthlyBudget && monthlyBudget > 0) {
+    monthlyBudgetDisplay.textContent = formatCurrency(monthlyBudget);
+    
+    const remaining = monthlyBudget - currentMonthTotal;
+    remainingBudgetDisplay.textContent = formatCurrency(remaining);
+    
+    // Add color coding based on budget status
+    if (remaining < 0) {
+      remainingBudgetDisplay.style.color = 'var(--danger-color, #dc3545)';
+      remainingBudgetDisplay.textContent = formatCurrency(Math.abs(remaining)) + ' over';
+    } else if (remaining < monthlyBudget * 0.2) {
+      remainingBudgetDisplay.style.color = 'var(--warning-color, #ffc107)';
+    } else {
+      remainingBudgetDisplay.style.color = 'var(--success-color, #28a745)';
+    }
+  } else {
+    monthlyBudgetDisplay.textContent = 'Not Set';
+    remainingBudgetDisplay.textContent = '-';
+    remainingBudgetDisplay.style.color = '';
+  }
 
   if (stats.topCategory) {
     elements.topCategory.textContent = `${stats.topCategory} (${formatCurrency(
