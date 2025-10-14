@@ -4,6 +4,43 @@
 const STORAGE_KEY = 'student-finance-tracker';
 const DEFAULT_CURRENCY = 'USD';
 const DEFAULT_CATEGORIES = ['Food', 'Books', 'Transport', 'Entertainment', 'Fees', 'Other'];
+const BASE_CURRENCY = 'RWF';
+const USD_TO_RWF = 1452.49;
+const EURO_TO_RWF = 1681.40;
+
+// Currency conversion rates (all relative to RWF as base)
+const CURRENCY_RATES = {
+    'RWF': 1,
+    'USD': 1 / USD_TO_RWF,
+    'EUR': 1 / EURO_TO_RWF
+};
+
+/**
+ * Get available currencies
+ * @returns {Array} Array of currency codes
+ */
+export function getAvailableCurrencies() {
+    return Object.keys(CURRENCY_RATES);
+}
+
+/**
+ * Convert amount from one currency to another
+ * @param {number} amount - Amount to convert
+ * @param {string} fromCurrency - Source currency code
+ * @param {string} toCurrency - Target currency code
+ * @returns {number} Converted amount
+ */
+export function convertCurrency(amount, fromCurrency, toCurrency) {
+    if (fromCurrency === toCurrency) return amount;
+    
+    // Convert to RWF first (base currency)
+    const amountInRWF = amount / (CURRENCY_RATES[fromCurrency] || 1);
+    
+    // Convert from RWF to target currency
+    const convertedAmount = amountInRWF * (CURRENCY_RATES[toCurrency] || 1);
+    
+    return parseFloat(convertedAmount.toFixed(2));
+}
 
 // Initialize default settings if they don't exist
 const defaultSettings = {
@@ -163,6 +200,29 @@ export function getSettings() {
  */
 export function updateSettings(newSettings) {
     const data = loadData();
+    const oldCurrency = data.settings.currency || DEFAULT_CURRENCY;
+    const newCurrency = newSettings.currency;
+    
+    // Check if currency is being changed
+    if (newCurrency && newCurrency !== oldCurrency) {
+        console.log(`Converting all transactions from ${oldCurrency} to ${newCurrency}`);
+        
+        // Convert all transaction amounts to the new currency
+        data.transactions = data.transactions.map(transaction => ({
+            ...transaction,
+            amount: convertCurrency(transaction.amount, oldCurrency, newCurrency)
+        }));
+        
+        // Convert monthly budget if it exists
+        if (data.settings.monthlyBudget) {
+            data.settings.monthlyBudget = convertCurrency(
+                data.settings.monthlyBudget,
+                oldCurrency,
+                newCurrency
+            );
+        }
+    }
+    
     data.settings = {
         ...data.settings,
         ...newSettings

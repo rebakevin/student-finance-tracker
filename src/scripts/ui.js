@@ -800,13 +800,29 @@ function formatDate(dateString, options = {}) {
 /**
  * Format a number as currency
  * @param {number} amount - The amount to format
- * @param {string} currency - Currency code (e.g., 'USD', 'EUR')
+ * @param {string} currency - Currency code (e.g., 'USD', 'EUR', 'RWF')
  * @returns {string} Formatted currency string
  */
-function formatCurrency(amount, currency = 'USD') {
+function formatCurrency(amount, currency) {
+  // Get currency from settings if not provided
+  if (!currency) {
+    const currentState = state.getState();
+    currency = currentState.settings?.currency || 'USD';
+  }
+  
+  // Special handling for RWF (Rwandan Franc)
+  if (currency === 'RWF') {
+    const formatted = new Intl.NumberFormat('en-US', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount || 0);
+    return `${formatted} RWF`;
+  }
+  
+  // Standard currency formatting for USD, EUR, etc.
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: currency || 'USD',
+    currency: currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(amount || 0);
