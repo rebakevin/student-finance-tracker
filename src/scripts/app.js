@@ -2,6 +2,10 @@
 
 import state from './state.js';
 import { showStatus } from './ui.js';
+import { initDarkMode } from '../js/dark-mode.js';
+
+// Initialize dark mode
+initDarkMode();
 
 /**
  * Initialize the application

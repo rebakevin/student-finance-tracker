@@ -52,8 +52,17 @@
     <!-- Status Message Component Container -->
     <div id="status-message-container"></div>
 
-    <!-- JavaScript files -->
-    <!-- Component Loader - Must be loaded first -->
+    <!-- Load all JavaScript files -->
+    <!-- Initialize theme before other scripts to prevent flash of unstyled content -->
+    <script>
+      // Set theme before page loads to prevent flash of unstyled content
+      (function() {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      })();
+    </script>
     <script src="/src/scripts/componentLoader.js" type="module"></script>
     <script src="/src/scripts/mobileMenu.js" type="module"></script>
     <script src="/src/scripts/validators.js" type="module"></script>
@@ -63,5 +72,6 @@
     <script src="/src/scripts/ui.js" type="module"></script>
     <script src="/src/scripts/app.js" type="module"></script>
     <script src="/src/scripts/routing.js" type="module"></script>
+    <script src="/src/js/dark-mode.js" type="module"></script>
   </body>
 </html>

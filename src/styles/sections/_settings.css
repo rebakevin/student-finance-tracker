@@ -1,85 +1,85 @@
 .settings-form {
-    background: #fff;
-    border-radius: var(--border-radius);
-    padding: var(--spacing-lg);
-    box-shadow: var(--shadow-sm);
-    margin-bottom: var(--spacing-lg);
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-lg);
 }
 
 .currency-options {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
 }
 
 .radio-label {
-    display: flex;
-    align-items: center;
-    padding: var(--spacing-sm);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: var(--transition);
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: var(--transition);
 }
 
 .radio-label:hover {
-    background-color: var(--light-color);
+  background-color: var(--light-color);
 }
 
 .radio-label input[type="radio"] {
-    margin-right: var(--spacing-sm);
-    width: auto;
+  margin-right: var(--spacing-sm);
+  width: auto;
 }
 
 .hint {
-    font-size: 0.875rem;
-    color: var(--text-muted);
-    margin-top: var(--spacing-xs);
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-top: var(--spacing-xs);
 }
 
 .conversion-rate-group {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
 }
 
 .conversion-rate-group label {
-    font-weight: 500;
-    min-width: 80px;
+  font-weight: 500;
+  min-width: 80px;
 }
 
 .conversion-rate-group input {
-    flex: 1;
-    max-width: 200px;
+  flex: 1;
+  max-width: 200px;
 }
 
 .conversion-rate-group span {
-    font-weight: 500;
-    color: var(--text-muted);
+  font-weight: 500;
+  color: var(--text-muted);
 }
 
 .danger-zone {
-    background: #fff;
-    border-radius: var(--border-radius);
-    padding: var(--spacing-lg);
-    box-shadow: var(--shadow-sm);
-    border: 2px solid var(--danger-color);
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  border: 2px solid var(--danger-color);
 }
 
 .danger-zone h3 {
-    color: var(--danger-color);
-    margin-bottom: var(--spacing-md);
+  color: var(--danger-color);
+  margin-bottom: var(--spacing-md);
 }
 
 .danger-actions {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
 }
 
 .warning {
-    font-size: 0.875rem;
-    color: var(--text-muted);
-    margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin: 0;
 }

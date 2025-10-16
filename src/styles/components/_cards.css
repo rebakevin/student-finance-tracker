@@ -1,26 +1,26 @@
 .stat-card {
-    background: #fff;
-    border-radius: var(--border-radius);
-    padding: var(--spacing-lg);
-    box-shadow: var(--shadow-sm);
-    text-align: center;
-    transition: var(--transition);
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  transition: var(--transition);
 }
 
 .stat-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
 }
 
 .stat-card h3 {
-    color: var(--text-muted);
-    font-size: 1rem;
-    margin-bottom: var(--spacing-sm);
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin-bottom: var(--spacing-sm);
 }
 
 .stat-amount {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--primary-color);
-    margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0;
 }

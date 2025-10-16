@@ -1,5 +1,5 @@
 :root {
-    /* Colors */
+    /* Light theme colors (default) */
     --primary-color: #4a6fa5;
     --primary-dark: #3a5a80;
     --secondary-color: #6c757d;
@@ -11,6 +11,14 @@
     --text-color: #212529;
     --text-muted: #6c757d;
     --border-color: #dee2e6;
+    --bg-color: #ffffff;
+    --card-bg: #ffffff;
+    
+    /* Dark theme colors */
+    --dark-bg-color: #1a1a1a;
+    --dark-card-bg: #2d2d2d;
+    --dark-text-color: #f8f9fa;
+    --dark-border-color: #444;
     
     /* Spacing */
     --spacing-xs: 0.25rem;
@@ -32,4 +40,12 @@
     
     /* Transitions */
     --transition: all 0.2s ease-in-out;
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] {
+    --text-color: var(--dark-text-color);
+    --bg-color: var(--dark-bg-color);
+    --border-color: var(--dark-border-color);
+    --card-bg: var(--dark-card-bg);
 }

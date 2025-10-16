@@ -1,48 +1,55 @@
 .transactions-table-container {
-    overflow-x: auto;
-    margin-bottom: var(--spacing-lg);
-    background: #fff;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+  margin-bottom: var(--spacing-lg);
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
 }
 
 table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
-th, td {
-    padding: 0.75rem;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
+th,
+td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
 }
 
 th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
+  background-color: var(--light-color);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+/* Dark mode: darker header with white text for readability */
+[data-theme="dark"] th {
+  background-color: #2f2f2f;
+  color: #fff;
 }
 
 tr:last-child td {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 tr:hover {
-    background-color: rgba(0, 0, 0, 0.01);
+  background-color: rgba(0, 0, 0, 0.01);
 }
 
 .amount {
-    font-family: 'Courier New', monospace;
-    font-weight: 600;
+  font-family: "Courier New", monospace;
+  font-weight: 600;
 }
 
 .amount.income {
-    color: var(--success-color);
+  color: var(--success-color);
 }
 
 .amount.expense {
-    color: var(--danger-color);
+  color: var(--danger-color);
 }

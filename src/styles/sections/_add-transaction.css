@@ -2,8 +2,8 @@
 /* Most styles are inherited from components/_forms.css */
 
 .transaction-form {
-    background: #fff;
-    border-radius: var(--border-radius);
-    padding: var(--spacing-lg);
-    box-shadow: var(--shadow-sm);
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
 }
