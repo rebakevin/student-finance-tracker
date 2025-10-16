@@ -178,12 +178,14 @@
 .main-nav a {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   padding: var(--spacing-md) var(--spacing-lg);
   color: var(--text-color);
   text-decoration: none;
   transition: var(--transition);
   font-size: 1rem;
   width: 100%;
+  text-align: left;
 }
 
 .main-nav a:hover,

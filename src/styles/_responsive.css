@@ -2,18 +2,18 @@
 /* This file can be used for additional responsive utilities if needed */
 
 @media (max-width: 575px) {
-    .main-nav ul {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .main-nav a {
-        justify-content: center;
-    }
+  .main-nav ul {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .main-nav a {
+    justify-content: flex-start;
+  }
 }
 
 @media (min-width: 992px) {
-    .stats-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
