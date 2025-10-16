@@ -137,6 +137,7 @@ function setupEventListeners() {
   const exportBtn = document.getElementById("export-json");
   const importBtn = document.getElementById("import-json");
   const importFileInput = document.getElementById("import-json-file");
+  const clearDataBtn = document.getElementById("clear-data");
 
   if (exportBtn) {
     exportBtn.addEventListener("click", handleExportData);
@@ -150,6 +151,27 @@ function setupEventListeners() {
 
   if (importFileInput) {
     importFileInput.addEventListener("change", handleImportData);
+  }
+
+  if (clearDataBtn) {
+    clearDataBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      showConfirm(
+        "Are you sure you want to delete ALL transactions? Settings will be kept.",
+        async () => {
+          const ok = await state.clearAllTransactions();
+          if (ok) {
+            showStatus("All transactions cleared.", "success");
+            // If currently on transactions page, re-render list (now empty)
+            if (state.getState().currentSection === "transactions") {
+              renderTransactionList([], 1, state.getState().itemsPerPage);
+            }
+          } else {
+            showStatus("Failed to clear transactions.", "error");
+          }
+        }
+      );
+    });
   }
 
   // Modal close buttons
