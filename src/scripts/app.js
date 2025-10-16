@@ -9,24 +9,42 @@ function init() {
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker
-          .register("/service-worker.js")
-          .catch(error => console.error("ServiceWorker registration failed:", error));
+          .register("./service-worker.js")
+          .catch((error) =>
+            console.error("ServiceWorker registration failed:", error)
+          );
       });
     }
 
-    window.addEventListener("online", () => showStatus("You are back online", "success"));
-    window.addEventListener("offline", () => showStatus("You are currently offline. Some features may be limited.", "warning"));
+    window.addEventListener("online", () =>
+      showStatus("You are back online", "success")
+    );
+    window.addEventListener("offline", () =>
+      showStatus(
+        "You are currently offline. Some features may be limited.",
+        "warning"
+      )
+    );
 
     if (!navigator.onLine) {
-      showStatus("You are currently offline. Some features may be limited.", "warning");
+      showStatus(
+        "You are currently offline. Some features may be limited.",
+        "warning"
+      );
     }
 
     window.addEventListener("beforeunload", () => {});
 
-    setTimeout(() => showStatus("Welcome to Student Finance Tracker!", "success"), 1000);
+    setTimeout(
+      () => showStatus("Welcome to Student Finance Tracker!", "success"),
+      1000
+    );
   } catch (error) {
     console.error("Error initializing application:", error);
-    showStatus("Failed to initialize the application. Please refresh the page.", "error");
+    showStatus(
+      "Failed to initialize the application. Please refresh the page.",
+      "error"
+    );
   }
 }
 
