@@ -49,4 +49,4 @@ Try to use all features mentioned in the features section
 
 ---
 
-Created with ❤️ for students everywhere
+Created with ❤️ by a student, for students everywhere
