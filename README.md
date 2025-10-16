@@ -2,6 +2,13 @@
 
 A lightweight, accessible app for tracking income/expenses. Built with vanilla HTML/CSS/JS.
 
+## Demo
+
+> [!NOTE]  
+> Click this thumbnail 👇👇 to watch the demo video on YouTube
+
+[![Watch the video](https://img.youtube.com/vi/nLitsZ_2wsQ/sddefault.jpg)](https://youtu.be/nLitsZ_2wsQ)
+
 ## Overview
 
 - **Purpose**: Simple personal finance tracking for students
