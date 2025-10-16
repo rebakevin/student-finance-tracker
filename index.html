@@ -56,10 +56,10 @@
     <!-- Initialize theme before other scripts to prevent flash of unstyled content -->
     <script>
       // Set theme before page loads to prevent flash of unstyled content
-      (function() {
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        if (savedTheme === 'dark') {
-          document.documentElement.setAttribute('data-theme', 'dark');
+      (function () {
+        const savedTheme = localStorage.getItem("theme") || "light";
+        if (savedTheme === "dark") {
+          document.documentElement.setAttribute("data-theme", "dark");
         }
       })();
     </script>
@@ -72,6 +72,6 @@
     <script src="/src/scripts/ui.js" type="module"></script>
     <script src="/src/scripts/app.js" type="module"></script>
     <script src="/src/scripts/routing.js" type="module"></script>
-    <script src="/src/js/dark-mode.js" type="module"></script>
+    <script src="/src/scripts/dark-mode.js" type="module"></script>
   </body>
 </html>
