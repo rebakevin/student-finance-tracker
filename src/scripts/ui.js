@@ -1,12 +1,12 @@
 // UI module - Handles all DOM manipulation and event listeners
 
-import state from './state.js';
+import state from "./state.js";
 import {
   validateDescription,
   validateAmount,
   validateCategory,
   validateDate,
-} from './validators.js';
+} from "./validators.js";
 
 // DOM Elements - will be initialized after components are loaded
 let elements = {};
@@ -24,51 +24,51 @@ function initElements() {
   elements = {
     // Main sections
     sections: {
-      dashboard: document.getElementById('dashboard'),
-      transactions: document.getElementById('transactions'),
-      addTransaction: document.getElementById('add-transaction'),
-      settings: document.getElementById('settings'),
-      about: document.getElementById('about'),
+      dashboard: document.getElementById("dashboard"),
+      transactions: document.getElementById("transactions"),
+      "add-transaction": document.getElementById("add-transaction"),
+      settings: document.getElementById("settings"),
+      about: document.getElementById("about"),
     },
 
     // Navigation
-    navLinks: document.querySelectorAll('.nav-link'),
+    navLinks: document.querySelectorAll(".nav-link"),
 
     // Transaction form
-    transactionForm: document.getElementById('transaction-form'),
-    transactionDescription: document.getElementById('transaction-description'),
-    transactionAmount: document.getElementById('transaction-amount'),
-    transactionCategory: document.getElementById('transaction-category'),
-    transactionDate: document.getElementById('transaction-date'),
+    transactionForm: document.getElementById("transaction-form"),
+    transactionDescription: document.getElementById("transaction-description"),
+    transactionAmount: document.getElementById("transaction-amount"),
+    transactionCategory: document.getElementById("transaction-category"),
+    transactionDate: document.getElementById("transaction-date"),
 
     // Transaction list
-    transactionsList: document.getElementById('transactions-list'),
-    recentTransactions: document.getElementById('recent-transactions'),
+    transactionsList: document.getElementById("transactions-list"),
+    recentTransactions: document.getElementById("recent-transactions"),
 
     // Search and filters
-    searchInput: document.getElementById('search-transactions'),
-    clearSearchBtn: document.getElementById('clear-search'),
-    filterCategory: document.getElementById('filter-category'),
-    sortBy: document.getElementById('sort-by'),
+    searchInput: document.getElementById("search-transactions"),
+    clearSearchBtn: document.getElementById("clear-search"),
+    filterCategory: document.getElementById("filter-category"),
+    sortBy: document.getElementById("sort-by"),
 
     // Dashboard elements
-    totalBalance: document.getElementById('total-balance'),
-    monthlyTotal: document.getElementById('monthly-total'),
-    topCategory: document.getElementById('top-category'),
+    totalBalance: document.getElementById("total-balance"),
+    monthlyTotal: document.getElementById("monthly-total"),
+    topCategory: document.getElementById("top-category"),
 
     // Settings form
-    settingsForm: document.getElementById('settings-form'),
-    monthlyBudget: document.getElementById('monthly-budget'),
+    settingsForm: document.getElementById("settings-form"),
+    monthlyBudget: document.getElementById("monthly-budget"),
 
     // Modals
-    editModal: document.getElementById('edit-modal'),
-    confirmDialog: document.getElementById('confirm-dialog'),
-    confirmMessage: document.getElementById('confirm-message'),
-    confirmYes: document.getElementById('confirm-yes'),
-    confirmNo: document.getElementById('confirm-no'),
+    editModal: document.getElementById("edit-modal"),
+    confirmDialog: document.getElementById("confirm-dialog"),
+    confirmMessage: document.getElementById("confirm-message"),
+    confirmYes: document.getElementById("confirm-yes"),
+    confirmNo: document.getElementById("confirm-no"),
 
     // Status message
-    statusMessage: document.getElementById('status-message'),
+    statusMessage: document.getElementById("status-message"),
   };
 }
 
@@ -86,14 +86,14 @@ function init() {
   render(state.getState());
 
   // Set current date as default and max for new transactions
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split("T")[0];
   if (elements.transactionDate) {
     elements.transactionDate.value = today;
-    elements.transactionDate.setAttribute('max', today);
+    elements.transactionDate.setAttribute("max", today);
   }
 
-  console.log('✓ UI initialized');
-  console.log('Current state:', state.getState());
+  console.log("✓ UI initialized");
+  console.log("Current state:", state.getState());
 }
 
 /**
@@ -102,63 +102,63 @@ function init() {
 function setupEventListeners() {
   // Navigation
   elements.navLinks.forEach((link) => {
-    link.addEventListener('click', (e) => {
+    link.addEventListener("click", (e) => {
       e.preventDefault();
-      const sectionId = link.getAttribute('data-section');
+      const sectionId = link.getAttribute("data-section");
       state.navigateTo(sectionId);
     });
   });
 
   // Transaction form
-  elements.transactionForm.addEventListener('submit', handleTransactionSubmit);
+  elements.transactionForm.addEventListener("submit", handleTransactionSubmit);
 
   // Search and filters
-  elements.searchInput.addEventListener('input', (e) => {
+  elements.searchInput.addEventListener("input", (e) => {
     state.setSearchQuery(e.target.value);
   });
 
-  elements.clearSearchBtn.addEventListener('click', () => {
-    elements.searchInput.value = '';
-    state.setSearchQuery('');
+  elements.clearSearchBtn.addEventListener("click", () => {
+    elements.searchInput.value = "";
+    state.setSearchQuery("");
   });
 
-  elements.filterCategory.addEventListener('change', (e) => {
+  elements.filterCategory.addEventListener("change", (e) => {
     state.setSelectedCategory(e.target.value);
   });
 
-  elements.sortBy.addEventListener('change', (e) => {
+  elements.sortBy.addEventListener("change", (e) => {
     state.setSortBy(e.target.value);
   });
 
   // Settings form
-  elements.settingsForm.addEventListener('submit', handleSettingsSubmit);
+  elements.settingsForm.addEventListener("submit", handleSettingsSubmit);
 
   // Export/Import buttons
-  const exportBtn = document.getElementById('export-json');
-  const importBtn = document.getElementById('import-json');
-  const importFileInput = document.getElementById('import-json-file');
+  const exportBtn = document.getElementById("export-json");
+  const importBtn = document.getElementById("import-json");
+  const importFileInput = document.getElementById("import-json-file");
 
   if (exportBtn) {
-    exportBtn.addEventListener('click', handleExportData);
+    exportBtn.addEventListener("click", handleExportData);
   }
 
   if (importBtn) {
-    importBtn.addEventListener('click', () => {
+    importBtn.addEventListener("click", () => {
       importFileInput?.click();
     });
   }
 
   if (importFileInput) {
-    importFileInput.addEventListener('change', handleImportData);
+    importFileInput.addEventListener("change", handleImportData);
   }
 
   // Modal close buttons
-  document.querySelectorAll('.close-modal').forEach((btn) => {
-    btn.addEventListener('click', closeAllModals);
+  document.querySelectorAll(".close-modal").forEach((btn) => {
+    btn.addEventListener("click", closeAllModals);
   });
 
   // Close modal when clicking outside content
-  window.addEventListener('click', (e) => {
+  window.addEventListener("click", (e) => {
     if (e.target === elements.editModal) {
       closeAllModals();
     }
@@ -168,13 +168,13 @@ function setupEventListeners() {
   });
 
   // Confirm dialog buttons
-  elements.confirmYes.addEventListener('click', handleConfirmYes);
-  elements.confirmNo.addEventListener('click', closeAllModals);
+  elements.confirmYes.addEventListener("click", handleConfirmYes);
+  elements.confirmNo.addEventListener("click", closeAllModals);
 
   // Keyboard navigation
-  document.addEventListener('keydown', (e) => {
+  document.addEventListener("keydown", (e) => {
     // Close modals on Escape key
-    if (e.key === 'Escape') {
+    if (e.key === "Escape") {
       closeAllModals();
     }
   });
@@ -190,13 +190,13 @@ async function handleTransactionSubmit(e) {
   // Get form data
   const formData = new FormData(elements.transactionForm);
   const transactionData = {
-    description: formData.get('description'),
-    amount: parseFloat(formData.get('amount')),
-    category: formData.get('category'),
-    date: formData.get('date'),
+    description: formData.get("description"),
+    amount: parseFloat(formData.get("amount")),
+    category: formData.get("category"),
+    date: formData.get("date"),
   };
 
-  console.log('🚀 TRANSACTION');
+  console.log("🚀 TRANSACTION");
   console.log(transactionData);
 
   // Validate form data
@@ -207,7 +207,7 @@ async function handleTransactionSubmit(e) {
   const categoryValidation = validateCategory(transactionData.category);
   const dateValidation = validateDate(transactionData.date);
 
-  console.log('🚀 VALIDATION');
+  console.log("🚀 VALIDATION");
   console.log(descriptionValidation);
   console.log(amountValidation);
   console.log(categoryValidation);
@@ -221,18 +221,18 @@ async function handleTransactionSubmit(e) {
     !dateValidation.isValid
   ) {
     // Show error messages
-    document.getElementById('description-error').textContent =
-      !descriptionValidation.isValid ? descriptionValidation.message : '';
+    document.getElementById("description-error").textContent =
+      !descriptionValidation.isValid ? descriptionValidation.message : "";
 
-    document.getElementById('amount-error').textContent =
-      !amountValidation.isValid ? amountValidation.message : '';
+    document.getElementById("amount-error").textContent =
+      !amountValidation.isValid ? amountValidation.message : "";
 
-    document.getElementById('category-error').textContent =
-      !categoryValidation.isValid ? categoryValidation.message : '';
+    document.getElementById("category-error").textContent =
+      !categoryValidation.isValid ? categoryValidation.message : "";
 
-    document.getElementById('date-error').textContent = !dateValidation.isValid
+    document.getElementById("date-error").textContent = !dateValidation.isValid
       ? dateValidation.message
-      : '';
+      : "";
 
     // Show the first error message in the status
     const firstError = !descriptionValidation.isValid
@@ -243,9 +243,9 @@ async function handleTransactionSubmit(e) {
       ? categoryValidation.message
       : !dateValidation.isValid
       ? dateValidation.message
-      : 'Please fix the errors in the form';
+      : "Please fix the errors in the form";
 
-    showStatus(firstError, 'error');
+    showStatus(firstError, "error");
     return;
   }
 
@@ -254,38 +254,49 @@ async function handleTransactionSubmit(e) {
     if (!uiState.currentTransactionId) {
       const currentState = state.getState();
       const monthlyBudget = currentState.settings?.monthlyBudget;
-      
+
       if (monthlyBudget && monthlyBudget > 0) {
         // Get current month's transactions
         const transactionDate = new Date(transactionData.date);
-        const transactionMonth = `${transactionDate.getFullYear()}-${String(transactionDate.getMonth() + 1).padStart(2, '0')}`;
-        
-        const monthlyTransactions = currentState.transactions.filter(tx => {
+        const transactionMonth = `${transactionDate.getFullYear()}-${String(
+          transactionDate.getMonth() + 1
+        ).padStart(2, "0")}`;
+
+        const monthlyTransactions = currentState.transactions.filter((tx) => {
           const txDate = new Date(tx.date);
-          const txMonth = `${txDate.getFullYear()}-${String(txDate.getMonth() + 1).padStart(2, '0')}`;
+          const txMonth = `${txDate.getFullYear()}-${String(
+            txDate.getMonth() + 1
+          ).padStart(2, "0")}`;
           return txMonth === transactionMonth;
         });
-        
+
         // Calculate current month's total
-        const currentMonthTotal = monthlyTransactions.reduce((sum, tx) => sum + tx.amount, 0);
+        const currentMonthTotal = monthlyTransactions.reduce(
+          (sum, tx) => sum + tx.amount,
+          0
+        );
         const newTotal = currentMonthTotal + transactionData.amount;
-        
+
         // Check if adding this transaction would exceed budget
         if (newTotal > monthlyBudget) {
           const remaining = monthlyBudget - currentMonthTotal;
           showStatus(
-            `Budget limit exceeded! Monthly budget: ${formatCurrency(monthlyBudget)}. ` +
-            `Current spending: ${formatCurrency(currentMonthTotal)}. ` +
-            `Remaining: ${formatCurrency(remaining)}. ` +
-            `This transaction would exceed your budget by ${formatCurrency(newTotal - monthlyBudget)}.`,
-            'error',
+            `Budget limit exceeded! Monthly budget: ${formatCurrency(
+              monthlyBudget
+            )}. ` +
+              `Current spending: ${formatCurrency(currentMonthTotal)}. ` +
+              `Remaining: ${formatCurrency(remaining)}. ` +
+              `This transaction would exceed your budget by ${formatCurrency(
+                newTotal - monthlyBudget
+              )}.`,
+            "error",
             8000
           );
           return;
         }
       }
     }
-    
+
     // Add or update transaction
     let success = false;
 
@@ -295,25 +306,25 @@ async function handleTransactionSubmit(e) {
         uiState.currentTransactionId,
         transactionData
       );
-      showStatus('Transaction updated successfully', 'success');
+      showStatus("Transaction updated successfully", "success");
     } else {
       // Add new transaction
       success = await state.addTransaction(transactionData);
-      showStatus('Transaction added successfully', 'success');
+      showStatus("Transaction added successfully", "success");
     }
 
     if (success) {
       // Reset form
       elements.transactionForm.reset();
-      elements.transactionDate.value = new Date().toISOString().split('T')[0];
+      elements.transactionDate.value = new Date().toISOString().split("T")[0];
       uiState.currentTransactionId = null;
 
       // Navigate to transactions list
-      state.navigateTo('transactions');
+      state.navigateTo("transactions");
     }
   } catch (error) {
-    console.error('Error saving transaction:', error);
-    showStatus('Failed to save transaction. Please try again.', 'error');
+    console.error("Error saving transaction:", error);
+    showStatus("Failed to save transaction. Please try again.", "error");
   }
 }
 
@@ -326,23 +337,23 @@ async function handleSettingsSubmit(e) {
 
   const formData = new FormData(elements.settingsForm);
   const settingsData = {
-    currency: formData.get('currency'),
-    monthlyBudget: formData.get('monthly-budget')
-      ? parseFloat(formData.get('monthly-budget'))
+    currency: formData.get("currency"),
+    monthlyBudget: formData.get("monthly-budget")
+      ? parseFloat(formData.get("monthly-budget"))
       : null,
-    usdToRwf: formData.get('usd-to-rwf')
-      ? parseFloat(formData.get('usd-to-rwf'))
+    usdToRwf: formData.get("usd-to-rwf")
+      ? parseFloat(formData.get("usd-to-rwf"))
       : 1452.49,
-    eurToRwf: formData.get('eur-to-rwf')
-      ? parseFloat(formData.get('eur-to-rwf'))
-      : 1681.40,
+    eurToRwf: formData.get("eur-to-rwf")
+      ? parseFloat(formData.get("eur-to-rwf"))
+      : 1681.4,
   };
 
   try {
     const success = await state.updateSettings(settingsData);
 
     if (success) {
-      showStatus('Settings saved successfully. Refreshing...', 'success');
+      showStatus("Settings saved successfully. Refreshing...", "success");
 
       // Reload the page after a short delay to show the success message
       setTimeout(() => {
@@ -350,8 +361,8 @@ async function handleSettingsSubmit(e) {
       }, 1000);
     }
   } catch (error) {
-    console.error('Error saving settings:', error);
-    showStatus('Failed to save settings. Please try again.', 'error');
+    console.error("Error saving settings:", error);
+    showStatus("Failed to save settings. Please try again.", "error");
   }
 }
 
@@ -359,11 +370,11 @@ async function handleSettingsSubmit(e) {
  * Handle confirm dialog "Yes" button click
  */
 async function handleConfirmYes() {
-  if (typeof uiState.confirmCallback === 'function') {
+  if (typeof uiState.confirmCallback === "function") {
     try {
       await uiState.confirmCallback();
     } catch (error) {
-      console.error('Error in confirmation callback:', error);
+      console.error("Error in confirmation callback:", error);
     }
   }
   closeAllModals();
@@ -377,8 +388,8 @@ async function handleConfirmYes() {
 function showConfirm(message, callback) {
   uiState.confirmCallback = callback;
   elements.confirmMessage.textContent = message;
-  elements.confirmDialog.classList.add('show');
-  document.body.style.overflow = 'hidden';
+  elements.confirmDialog.classList.add("show");
+  document.body.style.overflow = "hidden";
 
   // Focus the "No" button by default for safety
   elements.confirmNo.focus();
@@ -388,9 +399,9 @@ function showConfirm(message, callback) {
  * Close all modals and dialogs
  */
 function closeAllModals() {
-  elements.editModal.classList.remove('show');
-  elements.confirmDialog.classList.remove('show');
-  document.body.style.overflow = '';
+  elements.editModal.classList.remove("show");
+  elements.confirmDialog.classList.remove("show");
+  document.body.style.overflow = "";
   uiState.confirmCallback = null;
 
   // Reset the form if it's open in the modal
@@ -406,15 +417,15 @@ function closeAllModals() {
  * @param {string} type - Message type (success, error, info)
  * @param {number} duration - Duration in milliseconds (default: 5000)
  */
-function showStatus(message, type = 'info', duration = 5000) {
+function showStatus(message, type = "info", duration = 5000) {
   const status = elements.statusMessage;
   status.textContent = message;
   status.className = `status-message ${type}`;
-  status.classList.add('show');
+  status.classList.add("show");
 
   // Auto-hide after duration
   setTimeout(() => {
-    status.classList.remove('show');
+    status.classList.remove("show");
   }, duration);
 }
 
@@ -429,8 +440,8 @@ function render(state) {
   showSection(state.currentSection);
 
   // Update transaction list if on transactions page
-  if (state.currentSection === 'transactions') {
-    console.log('Rendering transactions:', state.filteredTransactions.length);
+  if (state.currentSection === "transactions") {
+    console.log("Rendering transactions:", state.filteredTransactions.length);
     renderTransactionList(
       state.filteredTransactions,
       state.currentPage,
@@ -439,12 +450,12 @@ function render(state) {
   }
 
   // Update dashboard if on dashboard page
-  if (state.currentSection === 'dashboard') {
+  if (state.currentSection === "dashboard") {
     renderDashboard(state);
   }
 
   // Update settings form if on settings page
-  if (state.currentSection === 'settings') {
+  if (state.currentSection === "settings") {
     renderSettingsForm(state.settings);
   }
 
@@ -458,10 +469,10 @@ function render(state) {
  */
 function updateActiveNav(activeSection) {
   elements.navLinks.forEach((link) => {
-    if (link.getAttribute('data-section') === activeSection) {
-      link.classList.add('active');
+    if (link.getAttribute("data-section") === activeSection) {
+      link.classList.add("active");
     } else {
-      link.classList.remove('active');
+      link.classList.remove("active");
     }
   });
 }
@@ -473,18 +484,18 @@ function updateActiveNav(activeSection) {
 function showSection(sectionId) {
   // Hide all sections
   Object.values(elements.sections).forEach((section) => {
-    section.classList.remove('active');
+    section.classList.remove("active");
   });
 
   // Show the requested section
   if (elements.sections[sectionId]) {
-    elements.sections[sectionId].classList.add('active');
+    elements.sections[sectionId].classList.add("active");
   }
 
   // Set max date when showing add-transaction section
-  if (sectionId === 'addTransaction' && elements.transactionDate) {
-    const today = new Date().toISOString().split('T')[0];
-    elements.transactionDate.setAttribute('max', today);
+  if (sectionId === "add-transaction" && elements.transactionDate) {
+    const today = new Date().toISOString().split("T")[0];
+    elements.transactionDate.setAttribute("max", today);
     if (!elements.transactionDate.value) {
       elements.transactionDate.value = today;
     }
@@ -507,17 +518,17 @@ function renderTransactionList(
 ) {
   const container = elements.transactionsList;
 
-  console.log('📊 renderTransactionList called');
-  console.log('Transactions to render:', transactions);
-  console.log('Container element:', container);
+  console.log("📊 renderTransactionList called");
+  console.log("Transactions to render:", transactions);
+  console.log("Container element:", container);
 
   if (!container) {
-    console.error('❌ Transaction list container not found!');
+    console.error("❌ Transaction list container not found!");
     return;
   }
 
   if (!transactions || transactions.length === 0) {
-    console.log('⚠️ No transactions to display');
+    console.log("⚠️ No transactions to display");
     container.innerHTML = `
             <tr class="empty-row">
                 <td colspan="5">No transactions found</td>
@@ -526,7 +537,7 @@ function renderTransactionList(
     return;
   }
 
-  console.log('✅ Rendering', transactions.length, 'transactions');
+  console.log("✅ Rendering", transactions.length, "transactions");
 
   // Calculate pagination
   const totalPages = Math.ceil(transactions.length / itemsPerPage);
@@ -537,7 +548,7 @@ function renderTransactionList(
   // Generate transaction rows
   const rows = paginatedTransactions
     .map((transaction) => {
-      const amountClass = transaction.amount < 0 ? 'expense' : 'income';
+      const amountClass = transaction.amount < 0 ? "expense" : "income";
       const formattedAmount = formatCurrency(Math.abs(transaction.amount));
       const formattedDate = formatDate(transaction.date);
 
@@ -549,7 +560,7 @@ function renderTransactionList(
                   transaction.category
                 )}</span></td>
                 <td class="amount ${amountClass}">${
-        transaction.amount < 0 ? '-' : ''
+        transaction.amount < 0 ? "-" : ""
       }${formattedAmount}</td>
                 <td class="actions">
                     <button class="btn-icon edit-transaction" aria-label="Edit transaction">
@@ -562,32 +573,32 @@ function renderTransactionList(
             </tr>
         `;
     })
-    .join('');
+    .join("");
 
   // Add pagination controls
-  let pagination = '';
+  let pagination = "";
   if (totalPages > 1) {
     pagination = `
             <tr class="pagination-row">
                 <td colspan="5">
                     <div class="pagination">
                         <button class="btn ${
-                          currentPage === 1 ? 'disabled' : ''
+                          currentPage === 1 ? "disabled" : ""
                         }" 
                                 onclick="state.setCurrentPage(${
                                   currentPage - 1
                                 })" 
-                                ${currentPage === 1 ? 'disabled' : ''}>
+                                ${currentPage === 1 ? "disabled" : ""}>
                             Previous
                         </button>
                         <span>Page ${currentPage} of ${totalPages}</span>
                         <button class="btn ${
-                          currentPage === totalPages ? 'disabled' : ''
+                          currentPage === totalPages ? "disabled" : ""
                         }" 
                                 onclick="state.setCurrentPage(${
                                   currentPage + 1
                                 })" 
-                                ${currentPage === totalPages ? 'disabled' : ''}>
+                                ${currentPage === totalPages ? "disabled" : ""}>
                             Next
                         </button>
                     </div>
@@ -599,18 +610,18 @@ function renderTransactionList(
   container.innerHTML = rows + pagination;
 
   // Add event listeners to action buttons
-  container.querySelectorAll('.edit-transaction').forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      const row = e.target.closest('tr');
-      const transactionId = row.getAttribute('data-id');
+  container.querySelectorAll(".edit-transaction").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const row = e.target.closest("tr");
+      const transactionId = row.getAttribute("data-id");
       editTransaction(transactionId);
     });
   });
 
-  container.querySelectorAll('.delete-transaction').forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      const row = e.target.closest('tr');
-      const transactionId = row.getAttribute('data-id');
+  container.querySelectorAll(".delete-transaction").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const row = e.target.closest("tr");
+      const transactionId = row.getAttribute("data-id");
       deleteTransaction(transactionId);
     });
   });
@@ -625,34 +636,37 @@ function renderDashboard(stateData) {
 
   // Update summary cards
   elements.totalBalance.textContent = formatCurrency(stats.totalSpent);
-  
+
   const currentMonthTotal = stats.monthlySummary[getCurrentMonthYear()] || 0;
   elements.monthlyTotal.textContent = formatCurrency(currentMonthTotal);
 
   // Update budget information
-  const monthlyBudgetDisplay = document.getElementById('monthly-budget-display');
-  const remainingBudgetDisplay = document.getElementById('remaining-budget');
+  const monthlyBudgetDisplay = document.getElementById(
+    "monthly-budget-display"
+  );
+  const remainingBudgetDisplay = document.getElementById("remaining-budget");
   const monthlyBudget = stateData.settings?.monthlyBudget;
-  
+
   if (monthlyBudget && monthlyBudget > 0) {
     monthlyBudgetDisplay.textContent = formatCurrency(monthlyBudget);
-    
+
     const remaining = monthlyBudget - currentMonthTotal;
     remainingBudgetDisplay.textContent = formatCurrency(remaining);
-    
+
     // Add color coding based on budget status
     if (remaining < 0) {
-      remainingBudgetDisplay.style.color = 'var(--danger-color, #dc3545)';
-      remainingBudgetDisplay.textContent = formatCurrency(Math.abs(remaining)) + ' over';
+      remainingBudgetDisplay.style.color = "var(--danger-color, #dc3545)";
+      remainingBudgetDisplay.textContent =
+        formatCurrency(Math.abs(remaining)) + " over";
     } else if (remaining < monthlyBudget * 0.2) {
-      remainingBudgetDisplay.style.color = 'var(--warning-color, #ffc107)';
+      remainingBudgetDisplay.style.color = "var(--warning-color, #ffc107)";
     } else {
-      remainingBudgetDisplay.style.color = 'var(--success-color, #28a745)';
+      remainingBudgetDisplay.style.color = "var(--success-color, #28a745)";
     }
   } else {
-    monthlyBudgetDisplay.textContent = 'Not Set';
-    remainingBudgetDisplay.textContent = '-';
-    remainingBudgetDisplay.style.color = '';
+    monthlyBudgetDisplay.textContent = "Not Set";
+    remainingBudgetDisplay.textContent = "-";
+    remainingBudgetDisplay.style.color = "";
   }
 
   if (stats.topCategory) {
@@ -660,7 +674,7 @@ function renderDashboard(stateData) {
       stats.topCategoryAmount
     )})`;
   } else {
-    elements.topCategory.textContent = 'N/A';
+    elements.topCategory.textContent = "N/A";
   }
 
   // Render recent transactions (last 5)
@@ -678,13 +692,14 @@ function renderRecentTransactions(transactions) {
   const container = elements.recentTransactions;
 
   if (!transactions || transactions.length === 0) {
-    container.innerHTML = '<p class="empty-state">No recent transactions. Add your first transaction to get started!</p>';
+    container.innerHTML =
+      '<p class="empty-state">No recent transactions. Add your first transaction to get started!</p>';
     return;
   }
 
   const items = transactions
     .map((transaction) => {
-      const amountClass = transaction.amount < 0 ? 'expense' : 'income';
+      const amountClass = transaction.amount < 0 ? "expense" : "income";
       const formattedAmount = formatCurrency(Math.abs(transaction.amount));
       const formattedDate = formatDate(transaction.date);
 
@@ -692,13 +707,19 @@ function renderRecentTransactions(transactions) {
             <div class="transaction-card">
                 <div class="transaction-card-header">
                     <div class="transaction-card-icon ${amountClass}">
-                        <i class="fas fa-${transaction.amount < 0 ? 'arrow-down' : 'arrow-up'}"></i>
+                        <i class="fas fa-${
+                          transaction.amount < 0 ? "arrow-down" : "arrow-up"
+                        }"></i>
                     </div>
                     <div class="transaction-card-info">
-                        <h4 class="transaction-card-title">${escapeHtml(transaction.description)}</h4>
+                        <h4 class="transaction-card-title">${escapeHtml(
+                          transaction.description
+                        )}</h4>
                         <div class="transaction-card-meta">
                             <span class="transaction-card-category">
-                                <i class="fas fa-tag"></i> ${escapeHtml(transaction.category)}
+                                <i class="fas fa-tag"></i> ${escapeHtml(
+                                  transaction.category
+                                )}
                             </span>
                             <span class="transaction-card-date">
                                 <i class="fas fa-calendar"></i> ${formattedDate}
@@ -707,12 +728,12 @@ function renderRecentTransactions(transactions) {
                     </div>
                 </div>
                 <div class="transaction-card-amount ${amountClass}">
-                    ${transaction.amount < 0 ? '-' : '+'}${formattedAmount}
+                    ${transaction.amount < 0 ? "-" : "+"}${formattedAmount}
                 </div>
             </div>
         `;
     })
-    .join('');
+    .join("");
 
   container.innerHTML = items;
 }
@@ -726,7 +747,7 @@ function renderSettingsForm(settings = {}) {
 
   // Set currency radio button
   const currencyRadio = document.querySelector(
-    `input[name="currency"][value="${settings.currency || 'USD'}"]`
+    `input[name="currency"][value="${settings.currency || "USD"}"]`
   );
   if (currencyRadio) {
     currencyRadio.checked = true;
@@ -736,19 +757,19 @@ function renderSettingsForm(settings = {}) {
   if (settings.monthlyBudget !== null && settings.monthlyBudget !== undefined) {
     elements.monthlyBudget.value = settings.monthlyBudget;
   } else {
-    elements.monthlyBudget.value = '';
+    elements.monthlyBudget.value = "";
   }
 
   // Set conversion rates
-  const usdToRwfInput = document.getElementById('usd-to-rwf');
-  const eurToRwfInput = document.getElementById('eur-to-rwf');
-  
+  const usdToRwfInput = document.getElementById("usd-to-rwf");
+  const eurToRwfInput = document.getElementById("eur-to-rwf");
+
   if (usdToRwfInput) {
     usdToRwfInput.value = settings.usdToRwf || 1452.49;
   }
-  
+
   if (eurToRwfInput) {
-    eurToRwfInput.value = settings.eurToRwf || 1681.40;
+    eurToRwfInput.value = settings.eurToRwf || 1681.4;
   }
 }
 
@@ -778,7 +799,7 @@ function updateCategoryDropdowns(categories = []) {
 
     // Add categories
     categories.forEach((category) => {
-      const option = document.createElement('option');
+      const option = document.createElement("option");
       option.value = category;
       option.textContent = category;
       select.appendChild(option);
@@ -802,7 +823,7 @@ async function editTransaction(transactionId) {
       .transactions.find((t) => t.id === transactionId);
 
     if (!transaction) {
-      throw new Error('Transaction not found');
+      throw new Error("Transaction not found");
     }
 
     // Set form values
@@ -812,23 +833,25 @@ async function editTransaction(transactionId) {
     elements.transactionDate.value = transaction.date;
 
     // Update form title and submit button
-    document.querySelector('#add-transaction h2').textContent =
-      'Edit Transaction';
+    document.querySelector("#add-transaction h2").textContent =
+      "Edit Transaction";
     elements.transactionForm.querySelector(
       'button[type="submit"]'
-    ).textContent = 'Update Transaction';
+    ).textContent = "Update Transaction";
 
     // Store the transaction ID for update
     uiState.currentTransactionId = transactionId;
 
-    // Show the add transaction section
-    state.navigateTo('add-transaction');
+    // Show the add transaction section immediately
+    state.navigateTo("add-transaction");
+    // Force render now so the form is visible without extra click
+    showSection("add-transaction");
 
     // Focus the first field
     elements.transactionDescription.focus();
   } catch (error) {
-    console.error('Error preparing transaction for edit:', error);
-    showStatus('Failed to load transaction for editing', 'error');
+    console.error("Error preparing transaction for edit:", error);
+    showStatus("Failed to load transaction for editing", "error");
   }
 }
 
@@ -842,7 +865,7 @@ function deleteTransaction(transactionId) {
     .transactions.find((t) => t.id === transactionId);
 
   if (!transaction) {
-    showStatus('Transaction not found', 'error');
+    showStatus("Transaction not found", "error");
     return;
   }
 
@@ -853,7 +876,7 @@ function deleteTransaction(transactionId) {
     async () => {
       const success = await state.deleteTransaction(transactionId);
       if (success) {
-        showStatus('Transaction deleted successfully', 'success');
+        showStatus("Transaction deleted successfully", "success");
       }
     }
   );
@@ -866,7 +889,7 @@ function deleteTransaction(transactionId) {
  * @returns {string} Formatted date string
  */
 function formatDate(dateString, options = {}) {
-  if (!dateString) return '';
+  if (!dateString) return "";
 
   const date = new Date(dateString);
 
@@ -876,14 +899,14 @@ function formatDate(dateString, options = {}) {
 
   if (options.short) {
     // Short format: MMM D (e.g., Jan 15)
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   }
 
   // Default format: Month Day, Year (e.g., January 15, 2023)
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 }
 
@@ -897,21 +920,21 @@ function formatCurrency(amount, currency) {
   // Get currency from settings if not provided
   if (!currency) {
     const currentState = state.getState();
-    currency = currentState.settings?.currency || 'USD';
+    currency = currentState.settings?.currency || "USD";
   }
-  
+
   // Special handling for RWF (Rwandan Franc)
-  if (currency === 'RWF') {
-    const formatted = new Intl.NumberFormat('en-US', {
+  if (currency === "RWF") {
+    const formatted = new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount || 0);
     return `${formatted} RWF`;
   }
-  
+
   // Standard currency formatting for USD, EUR, etc.
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
     currency: currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -925,7 +948,7 @@ function formatCurrency(amount, currency) {
 function getCurrentMonthYear() {
   const now = new Date();
   const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const month = String(now.getMonth() + 1).padStart(2, "0");
   return `${year}-${month}`;
 }
 
@@ -935,13 +958,13 @@ function getCurrentMonthYear() {
  * @returns {string} Escaped HTML string
  */
 function escapeHtml(unsafe) {
-  if (typeof unsafe !== 'string') return '';
+  if (typeof unsafe !== "string") return "";
   return unsafe
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 /**
@@ -950,21 +973,21 @@ function escapeHtml(unsafe) {
 function handleExportData() {
   try {
     const jsonData = state.exportAllData();
-    const blob = new Blob([jsonData], { type: 'application/json' });
+    const blob = new Blob([jsonData], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `finance-tracker-export-${
-      new Date().toISOString().split('T')[0]
+      new Date().toISOString().split("T")[0]
     }.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    showStatus('Data exported successfully', 'success');
+    showStatus("Data exported successfully", "success");
   } catch (error) {
-    console.error('Error exporting data:', error);
-    showStatus('Failed to export data', 'error');
+    console.error("Error exporting data:", error);
+    showStatus("Failed to export data", "error");
   }
 }
 
@@ -980,20 +1003,20 @@ async function handleImportData(e) {
     const success = await state.importAllData(text);
 
     if (success) {
-      showStatus('Data imported successfully', 'success');
+      showStatus("Data imported successfully", "success");
       // Reset file input
-      e.target.value = '';
+      e.target.value = "";
     } else {
-      showStatus('Failed to import data. Invalid file format.', 'error');
+      showStatus("Failed to import data. Invalid file format.", "error");
     }
   } catch (error) {
-    console.error('Error importing data:', error);
-    showStatus('Failed to import data', 'error');
+    console.error("Error importing data:", error);
+    showStatus("Failed to import data", "error");
   }
 }
 
 // Initialize the UI when components are loaded
-document.addEventListener('componentsLoaded', () => {
+document.addEventListener("componentsLoaded", () => {
   init();
   // Subscribe to state changes after initialization
   state.subscribe(render);
