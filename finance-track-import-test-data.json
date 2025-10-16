@@ -1,0 +1,227 @@
+{
+  "version": "1.0.0",
+  "settings": {
+    "currency": "USD",
+    "monthlyBudget": null,
+    "categories": [
+      "Food",
+      "Books",
+      "Transport",
+      "Entertainment",
+      "Fees",
+      "Other"
+    ],
+    "usdToRwf": 1452.49,
+    "eurToRwf": 1681.4
+  },
+  "transactions": [
+    {
+      "description": "Restaurant",
+      "amount": 21.99,
+      "category": "Transport",
+      "date": "2025-10-09",
+      "id": "txn_1760430287265",
+      "createdAt": "2025-10-14T08:24:47.265Z",
+      "updatedAt": "2025-10-14T08:24:47.265Z"
+    },
+    {
+      "description": "Bike",
+      "amount": 12,
+      "category": "Entertainment",
+      "date": "2025-10-08",
+      "id": "txn_1760430251748",
+      "createdAt": "2025-10-14T08:24:11.748Z",
+      "updatedAt": "2025-10-14T08:24:11.748Z"
+    },
+    {
+      "description": "aasdf",
+      "amount": 12,
+      "category": "Transport",
+      "date": "2025-10-08",
+      "id": "txn_1760429500824",
+      "createdAt": "2025-10-14T08:11:40.824Z",
+      "updatedAt": "2025-10-14T08:11:40.824Z"
+    },
+    {
+      "description": "Groceries - Supermarket",
+      "amount": 48.75,
+      "category": "Food",
+      "date": "2025-10-07",
+      "id": "txn_1760431000001",
+      "createdAt": "2025-10-13T17:40:11.100Z",
+      "updatedAt": "2025-10-13T17:40:11.100Z"
+    },
+    {
+      "description": "Online Book Purchase",
+      "amount": 15.99,
+      "category": "Books",
+      "date": "2025-10-06",
+      "id": "txn_1760431000002",
+      "createdAt": "2025-10-13T16:25:30.431Z",
+      "updatedAt": "2025-10-13T16:25:30.431Z"
+    },
+    {
+      "description": "Bus Ticket",
+      "amount": 2.5,
+      "category": "Transport",
+      "date": "2025-10-05",
+      "id": "txn_1760431000003",
+      "createdAt": "2025-10-13T15:10:00.000Z",
+      "updatedAt": "2025-10-13T15:10:00.000Z"
+    },
+    {
+      "description": "Cinema Night",
+      "amount": 10,
+      "category": "Entertainment",
+      "date": "2025-10-04",
+      "id": "txn_1760431000004",
+      "createdAt": "2025-10-13T14:00:45.230Z",
+      "updatedAt": "2025-10-13T14:00:45.230Z"
+    },
+    {
+      "description": "University Fee Payment",
+      "amount": 350,
+      "category": "Fees",
+      "date": "2025-10-01",
+      "id": "txn_1760431000005",
+      "createdAt": "2025-10-13T13:12:12.000Z",
+      "updatedAt": "2025-10-13T13:12:12.000Z"
+    },
+    {
+      "description": "Editing Coffee Shop",
+      "amount": 5.26,
+      "category": "Food",
+      "date": "2025-10-10",
+      "id": "txn_1760431000006",
+      "createdAt": "2025-10-14T07:55:20.000Z",
+      "updatedAt": "2025-10-16T18:46:46.523Z"
+    },
+    {
+      "description": "Taxi Ride",
+      "amount": 8,
+      "category": "Transport",
+      "date": "2025-10-03",
+      "id": "txn_1760431000007",
+      "createdAt": "2025-10-12T19:44:11.000Z",
+      "updatedAt": "2025-10-12T19:44:11.000Z"
+    },
+    {
+      "description": "Streaming Subscription",
+      "amount": 12.99,
+      "category": "Entertainment",
+      "date": "2025-10-02",
+      "id": "txn_1760431000008",
+      "createdAt": "2025-10-12T18:10:59.000Z",
+      "updatedAt": "2025-10-12T18:10:59.000Z"
+    },
+    {
+      "description": "Library Fine",
+      "amount": 3,
+      "category": "Fees",
+      "date": "2025-10-06",
+      "id": "txn_1760431000009",
+      "createdAt": "2025-10-13T10:30:45.000Z",
+      "updatedAt": "2025-10-13T10:30:45.000Z"
+    },
+    {
+      "description": "Charity Donation",
+      "amount": 25,
+      "category": "Other",
+      "date": "2025-10-03",
+      "id": "txn_1760431000010",
+      "createdAt": "2025-10-12T09:15:30.000Z",
+      "updatedAt": "2025-10-12T09:15:30.000Z"
+    },
+    {
+      "description": "Lunch with Friends",
+      "amount": 18.39,
+      "category": "Food",
+      "date": "2025-10-08",
+      "id": "txn_1760431000011",
+      "createdAt": "2025-10-13T21:09:00.000Z",
+      "updatedAt": "2025-10-13T21:09:00.000Z"
+    },
+    {
+      "description": "Taxi to Airport",
+      "amount": 30,
+      "category": "Transport",
+      "date": "2025-09-30",
+      "id": "txn_1760431000012",
+      "createdAt": "2025-10-11T23:40:00.000Z",
+      "updatedAt": "2025-10-11T23:40:00.000Z"
+    },
+    {
+      "description": "Music Concert Ticket",
+      "amount": 55,
+      "category": "Entertainment",
+      "date": "2025-10-05",
+      "id": "txn_1760431000013",
+      "createdAt": "2025-10-13T19:22:10.000Z",
+      "updatedAt": "2025-10-13T19:22:10.000Z"
+    },
+    {
+      "description": "Stationery Purchase",
+      "amount": 9.75,
+      "category": "Books",
+      "date": "2025-10-04",
+      "id": "txn_1760431000014",
+      "createdAt": "2025-10-12T12:55:00.000Z",
+      "updatedAt": "2025-10-12T12:55:00.000Z"
+    },
+    {
+      "description": "Mobile Data Recharge",
+      "amount": 5,
+      "category": "Other",
+      "date": "2025-10-07",
+      "id": "txn_1760431000015",
+      "createdAt": "2025-10-13T09:45:15.000Z",
+      "updatedAt": "2025-10-13T09:45:15.000Z"
+    },
+    {
+      "description": "Subway Lunch",
+      "amount": 7.89,
+      "category": "Food",
+      "date": "2025-10-09",
+      "id": "txn_1760431000016",
+      "createdAt": "2025-10-13T11:10:00.000Z",
+      "updatedAt": "2025-10-13T11:10:00.000Z"
+    },
+    {
+      "description": "Campus Printing Fee",
+      "amount": 1.5,
+      "category": "Fees",
+      "date": "2025-10-08",
+      "id": "txn_1760431000017",
+      "createdAt": "2025-10-13T08:30:00.000Z",
+      "updatedAt": "2025-10-13T08:30:00.000Z"
+    },
+    {
+      "description": "Used Book Fair",
+      "amount": 6.2,
+      "category": "Books",
+      "date": "2025-10-03",
+      "id": "txn_1760431000018",
+      "createdAt": "2025-10-12T07:50:20.000Z",
+      "updatedAt": "2025-10-12T07:50:20.000Z"
+    },
+    {
+      "description": "Gas Refill",
+      "amount": 21.99,
+      "category": "Transport",
+      "date": "2025-10-02",
+      "id": "txn_1760431000019",
+      "createdAt": "2025-10-12T06:40:00.000Z",
+      "updatedAt": "2025-10-12T06:40:00.000Z"
+    },
+    {
+      "description": "Local Event Ticket",
+      "amount": 14,
+      "category": "Entertainment",
+      "date": "2025-10-09",
+      "id": "txn_1760431000020",
+      "createdAt": "2025-10-13T23:59:59.000Z",
+      "updatedAt": "2025-10-13T23:59:59.000Z"
+    }
+  ],
+  "lastUpdated": "2025-10-16T18:46:46.523Z"
+}
