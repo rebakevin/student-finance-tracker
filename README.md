@@ -2,7 +2,7 @@
 
 📌 Deployed URL: https://rebakevin.github.io/student-finance-tracker/
 
-A lightweight, accessible app for tracking income/expenses. Built with vanilla HTML/CSS/JS.
+A lightweight, accessible and responsive app for tracking expenses.
 
 ## Demo
 
