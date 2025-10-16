@@ -7,7 +7,7 @@ A lightweight, accessible app for tracking income/expenses. Built with vanilla H
 > [!NOTE]  
 > Click this thumbnail 👇👇 to watch the demo video on YouTube
 
-[![Watch the video](https://img.youtube.com/vi/nLitsZ_2wsQ/sddefault.jpg)](https://youtu.be/nLitsZ_2wsQ)
+[![Watch the video](https://img.youtube.com/vi/Ghb4HhafHyM/sddefault.jpg)](https://youtu.be/Ghb4HhafHyM)
 
 ## Overview
 
