@@ -135,12 +135,17 @@ function setupEventListeners() {
 
   // Export/Import buttons
   const exportBtn = document.getElementById("export-json");
+  const exportCsvBtn = document.getElementById("export-csv");
   const importBtn = document.getElementById("import-json");
   const importFileInput = document.getElementById("import-json-file");
   const clearDataBtn = document.getElementById("clear-data");
 
   if (exportBtn) {
     exportBtn.addEventListener("click", handleExportData);
+  }
+
+  if (exportCsvBtn) {
+    exportCsvBtn.addEventListener("click", handleExportCsv);
   }
 
   if (importBtn) {
@@ -1010,6 +1015,57 @@ function handleExportData() {
   } catch (error) {
     console.error("Error exporting data:", error);
     showStatus("Failed to export data", "error");
+  }
+}
+
+/**
+ * Handle export data as CSV button click
+ */
+function handleExportCsv() {
+  try {
+    const currentState = state.getState();
+    const transactions = currentState.transactions || [];
+
+    // CSV headers
+    const headers = ["Date", "Description", "Category", "Amount"];
+
+    // Escape CSV cell values
+    const escapeCell = (value) => {
+      if (value === null || value === undefined) return "";
+      const stringValue = String(value);
+      // If contains comma, quote or newline, wrap in quotes and escape quotes
+      if (/[",\n\r]/.test(stringValue)) {
+        return '"' + stringValue.replace(/"/g, '""') + '"';
+      }
+      return stringValue;
+    };
+
+    const rows = transactions.map((tx) => [
+      tx.date,
+      tx.description,
+      tx.category,
+      tx.amount,
+    ]);
+
+    const csvLines = [headers, ...rows]
+      .map((row) => row.map(escapeCell).join(","))
+      .join("\r\n");
+
+    const blob = new Blob([csvLines], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `finance-tracker-transactions-${
+      new Date().toISOString().split("T")[0]
+    }.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showStatus("CSV exported successfully", "success");
+  } catch (error) {
+    console.error("Error exporting CSV:", error);
+    showStatus("Failed to export CSV", "error");
   }
 }
 
