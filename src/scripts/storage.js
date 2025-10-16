@@ -364,18 +364,18 @@ export function importData(jsonString) {
       throw new Error("Invalid data format");
     }
 
-    // Ensure we have the minimum required structure
+    // Load existing data to preserve settings
+    const existing = loadData();
+
+    // Only import transactions; keep existing settings untouched
     const importedData = {
-      ...defaultData,
-      ...data,
-      settings: {
-        ...defaultData.settings,
-        ...(data.settings || {}),
-      },
-      transactions: Array.isArray(data.transactions) ? data.transactions : [],
+      ...existing,
+      transactions: Array.isArray(data.transactions)
+        ? data.transactions
+        : existing.transactions,
     };
 
-    // Save the imported data
+    // Save the imported transactions with existing settings
     if (saveData(importedData)) {
       return importedData;
     }
