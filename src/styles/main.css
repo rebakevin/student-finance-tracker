@@ -1,7 +1,3 @@
-/* ============================================
-   Student Finance Tracker - Main Stylesheet
-   ============================================ */
-
 /* Base Styles */
 @import url('base/_variables.css');
 @import url('base/_reset.css');
@@ -22,14 +18,6 @@
 @import url('components/_modals.css');
 @import url('components/_status-message.css');
 @import url('components/_cards.css');
-
-/* Sections - Lazy loaded by componentLoader.js */
-/* Uncomment these if you want to load them all at once */
-/* @import url('sections/_dashboard.css'); */
-/* @import url('sections/_transactions.css'); */
-/* @import url('sections/_add-transaction.css'); */
-/* @import url('sections/_settings.css'); */
-/* @import url('sections/_about.css'); */
 
 /* Responsive & Print */
 @import url('_responsive.css');
